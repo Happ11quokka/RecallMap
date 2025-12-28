@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Search, Loader2, Sparkles, FileText, ExternalLink } from 'lucide-react';
+import { Search, Loader2, Sparkles, FileText } from 'lucide-react';
 import { searchDocuments, composeAnswer, type SearchResultItem } from '@/api/backend';
 
 export default function SearchPanel() {

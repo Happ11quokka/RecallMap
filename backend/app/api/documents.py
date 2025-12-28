@@ -124,7 +124,26 @@ async def get_stats():
         from app.services.vector_db import get_vector_db
         vector_db = get_vector_db()
         stats = vector_db.get_stats()
-        return stats
+
+        # Pinecone stats 객체에서 필요한 정보만 추출 (primitive types만 사용)
+        total_count = 0
+        if hasattr(stats, 'total_vector_count'):
+            total_count = int(stats.total_vector_count)
+
+        dimension = 0
+        if hasattr(stats, 'dimension'):
+            dimension = int(stats.dimension)
+
+        # namespaces는 복잡한 객체이므로 단순 카운트만 반환
+        namespace_count = 0
+        if hasattr(stats, 'namespaces') and stats.namespaces:
+            namespace_count = len(stats.namespaces)
+
+        return {
+            "total_vector_count": total_count,
+            "dimension": dimension,
+            "namespace_count": namespace_count,
+        }
 
     except Exception as e:
         logger.error(f"Error getting stats: {e}")

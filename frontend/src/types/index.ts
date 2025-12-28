@@ -25,8 +25,12 @@ export interface NodeCreateResponse {
 export interface GraphNode {
   id: string;
   label: string;
-  format: NodeFormat;
   summary: string;
+  keywords: string[];
+  project: string;
+  created_at: string;
+  // 프론트엔드 전용 필드
+  format?: NodeFormat;
   x?: number;
   y?: number;
 }
@@ -35,11 +39,17 @@ export interface GraphEdge {
   source: string;
   target: string;
   weight: number;
+  edge_type: 'vector' | 'metadata' | 'hybrid';
 }
 
 export interface GraphData {
   nodes: GraphNode[];
   edges: GraphEdge[];
+  metadata: {
+    total_nodes: number;
+    total_edges: number;
+    avg_connections_per_node: number;
+  };
 }
 
 export interface SearchResult {

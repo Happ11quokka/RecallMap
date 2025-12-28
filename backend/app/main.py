@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
-from app.api import documents
+from app.api import documents, graphs
 from app.core.langsmith import init_langsmith
 
 # 로깅 설정
@@ -27,6 +27,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # Vite 개발 서버
+        "http://localhost:5174",  # Vite 추가 포트
+        "http://localhost:5175",  # Vite 추가 포트
+        "http://localhost:5176",  # Vite 추가 포트
         "http://localhost:3000",  # 추가 개발 서버
     ],
     allow_credentials=True,
@@ -36,6 +39,7 @@ app.add_middleware(
 
 # 라우터 등록
 app.include_router(documents.router)
+app.include_router(graphs.router)
 
 
 @app.get("/")

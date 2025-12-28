@@ -175,7 +175,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
 
   const { data: graphData, isLoading, error } = useQuery({
     queryKey: ['graph'],
-    queryFn: getGraphData,
+    queryFn: () => getGraphData(),
     refetchInterval: 30000,
   });
 
@@ -466,10 +466,12 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
   }
 
   if (error) {
+    console.error('NetworkView error:', error);
     return (
       <div className="h-full flex items-center justify-center bg-gray-50">
         <div className="text-center text-red-600">
           <p>네트워크를 불러오는 중 오류가 발생했습니다.</p>
+          <p className="text-sm mt-2">{(error as Error).message}</p>
         </div>
       </div>
     );

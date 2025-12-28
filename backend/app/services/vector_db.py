@@ -108,6 +108,89 @@ class VectorDBService:
             logger.error(f"Error getting stats: {e}")
             raise
 
+    def get_all_documents(
+        self,
+        project: Optional[str] = None,
+        limit: int = 200
+    ) -> List[Dict[str, Any]]:
+        """모든 문서 조회 (프로젝트 필터 지원)
+
+        Pinecone은 scan API가 없으므로 더미 벡터로 쿼리하여 모든 문서를 가져옵니다.
+        """
+        try:
+            # 더미 벡터로 쿼리 (0 벡터)
+            dummy_vector = [0.0] * self.dimension
+
+            # 필터 구성
+            filter_dict = None
+            if project:
+                filter_dict = {"project": {"$eq": project}}
+
+            # 쿼리 실행
+            results = self.index.query(
+                vector=dummy_vector,
+                top_k=limit,
+                filter=filter_dict,
+                include_metadata=True
+            )
+
+            documents = []
+            for match in results.matches:
+                doc = {
+                    "id": match.id,
+                    "metadata": match.metadata
+                }
+                documents.append(doc)
+
+            logger.info(f"Retrieved {len(documents)} documents")
+            return documents
+
+        except Exception as e:
+            logger.error(f"Error getting all documents: {e}")
+            raise
+
+    def query_similar(
+        self,
+        doc_id: str,
+        query_vector: List[float],
+        top_k: int = 20,
+        filter_dict: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
+        """특정 문서와 유사한 문서 검색
+
+        Args:
+            doc_id: 제외할 문서 ID (자기 자신)
+            query_vector: 쿼리 벡터
+            top_k: 최대 결과 개수
+            filter_dict: 필터 조건
+
+        Returns:
+            유사한 문서 리스트 (자기 자신 제외)
+        """
+        try:
+            results = self.index.query(
+                vector=query_vector,
+                top_k=top_k + 1,  # 자기 자신 포함될 수 있으므로 +1
+                filter=filter_dict,
+                include_metadata=True
+            )
+
+            similar_docs = []
+            for match in results.matches:
+                # 자기 자신 제외
+                if match.id != doc_id:
+                    similar_docs.append({
+                        "id": match.id,
+                        "score": match.score,
+                        "metadata": match.metadata
+                    })
+
+            return similar_docs[:top_k]
+
+        except Exception as e:
+            logger.error(f"Error querying similar documents: {e}")
+            raise
+
 
 # 싱글톤 인스턴스
 _vector_db_service = None
