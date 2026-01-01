@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Network, MessageSquare, Plus, ChevronLeft, X } from 'lucide-react';
+import { Network, MessageSquare, Plus, ChevronLeft, X, Sparkles } from 'lucide-react';
 import NetworkView from '@/components/NetworkView';
 import AgentChat from '@/components/AgentChat';
 import UploadForm from '@/components/UploadForm';
@@ -9,6 +9,7 @@ import NodeCard from '@/components/NodeCard';
 import { getNode, deleteNode } from '@/api/nodes';
 import { logNodeView } from '@/api/logs';
 import { useAppStore } from '@/store/useAppStore';
+import { demoNodeDetails } from '@/data/demoData';
 import type { Node } from '@/types';
 
 export default function MainApp() {
@@ -17,7 +18,7 @@ export default function MainApp() {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [selectedNodeDetail, setSelectedNodeDetail] = useState<Node | null>(null);
 
-  const { sessionId, setHighlightedNodeId } = useAppStore();
+  const { sessionId, setHighlightedNodeId, isDemoMode, setDemoMode } = useAppStore();
 
   const deleteMutation = useMutation({
     mutationFn: deleteNode,
@@ -31,6 +32,16 @@ export default function MainApp() {
   const handleNodeClick = useCallback(
     async (nodeId: string) => {
       try {
+        // 데모 모드에서는 데모 데이터 사용
+        if (isDemoMode) {
+          const demoNode = demoNodeDetails[nodeId];
+          if (demoNode) {
+            setSelectedNodeDetail(demoNode as Node);
+            setHighlightedNodeId(nodeId);
+          }
+          return;
+        }
+
         const node = await getNode(nodeId);
         setSelectedNodeDetail(node);
         setHighlightedNodeId(nodeId);
@@ -42,8 +53,14 @@ export default function MainApp() {
         console.error('Failed to fetch node:', error);
       }
     },
-    [sessionId, queryClient, setHighlightedNodeId]
+    [sessionId, queryClient, setHighlightedNodeId, isDemoMode]
   );
+
+  // 홈으로 돌아갈 때 데모 모드 해제
+  const handleGoHome = () => {
+    setDemoMode(false);
+    navigate('/');
+  };
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -52,7 +69,7 @@ export default function MainApp() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => navigate('/')}
+              onClick={handleGoHome}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5 text-gray-600" />
@@ -61,16 +78,25 @@ export default function MainApp() {
               <Network className="w-6 h-6 text-nova-600" />
               <span className="text-lg font-bold text-gray-900">NOVA</span>
             </div>
+            {/* 데모 모드 표시 */}
+            {isDemoMode && (
+              <div className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-nova-100 to-purple-100 rounded-full">
+                <Sparkles className="w-3.5 h-3.5 text-nova-600" />
+                <span className="text-xs font-medium text-nova-700">Demo Mode</span>
+              </div>
+            )}
           </div>
 
-          {/* Add Button */}
-          <button
-            onClick={() => setShowUploadForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-nova-600 text-white rounded-lg hover:bg-nova-700 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="text-sm font-medium">자료 추가</span>
-          </button>
+          {/* Add Button - 데모 모드에서는 숨김 */}
+          {!isDemoMode && (
+            <button
+              onClick={() => setShowUploadForm(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-nova-600 text-white rounded-lg hover:bg-nova-700 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="text-sm font-medium">자료 추가</span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -115,7 +141,7 @@ export default function MainApp() {
                 <NodeCard
                   node={selectedNodeDetail}
                   isSelected
-                  onDelete={() => deleteMutation.mutate(selectedNodeDetail.id)}
+                  onDelete={isDemoMode ? undefined : () => deleteMutation.mutate(selectedNodeDetail.id)}
                 />
               </div>
             </div>

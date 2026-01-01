@@ -18,9 +18,12 @@ import '@xyflow/react/dist/style.css';
 import { useQuery } from '@tanstack/react-query';
 import { getGraphData } from '@/api/nodes';
 import { useAppStore } from '@/store/useAppStore';
+import { demoGraphData, nodeClusterMap } from '@/data/demoData';
 import type { GraphNode } from '@/types';
 
-// 클러스터별 색상 팔레트 (이미지 스타일 - 진한 단색)
+// 클러스터별 색상 팔레트
+// 데모 모드: 모든 노드가 흰색
+// 일반 모드: 클러스터별 색상
 const clusterColors = [
   { main: '#5BC0EB', light: 'rgba(91, 192, 235, 0.3)' },  // 하늘색
   { main: '#E63946', light: 'rgba(230, 57, 70, 0.3)' },   // 빨강
@@ -34,13 +37,17 @@ const clusterColors = [
   { main: '#95D5B2', light: 'rgba(149, 213, 178, 0.3)' }, // 연두
 ];
 
+// 데모용 흰색 색상
+const demoNodeColor = { main: '#ffffff', light: 'rgba(255, 255, 255, 0.3)' };
+
 interface CustomNodeProps {
   data: {
     label: string;
     summary: string;
     isHighlighted: boolean;
     clusterColor: { main: string; light: string };
-    size: number; // 노드 크기 (연결 수에 따라)
+    size: number;
+    isDemoMode: boolean;
   };
 }
 
@@ -53,11 +60,12 @@ function CustomNode({ data }: CustomNodeProps) {
       className="relative"
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
+      style={{ width: size, height: size }}
     >
       {/* Tooltip */}
       {showTooltip && (
         <div
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-lg z-50"
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-white/95 text-gray-800 text-xs rounded-lg shadow-lg z-50 border border-gray-200"
           style={{
             pointerEvents: 'none',
             whiteSpace: 'nowrap',
@@ -66,14 +74,18 @@ function CustomNode({ data }: CustomNodeProps) {
           }}
         >
           {data.summary}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900/90" />
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-white/95" />
         </div>
       )}
 
-      {/* Circle Node - 단색, 테두리 없음 */}
+      {/* Node - 데모: 사각형 흰색, 일반: 원형 색상 */}
       <div
-        className={`rounded-full transition-all cursor-pointer ${
-          data.isHighlighted ? 'ring-2 ring-white ring-offset-2 scale-125' : 'hover:scale-110 hover:brightness-110'
+        className={`transition-all cursor-pointer ${
+          data.isDemoMode ? '' : 'rounded-full'
+        } ${
+          data.isHighlighted
+            ? 'ring-2 ring-offset-2 scale-125 ' + (data.isDemoMode ? 'ring-white/80' : 'ring-white')
+            : 'hover:scale-110 hover:brightness-110'
         }`}
         style={{
           width: size,
@@ -81,12 +93,34 @@ function CustomNode({ data }: CustomNodeProps) {
           backgroundColor: data.clusterColor.main,
           boxShadow: data.isHighlighted
             ? `0 0 20px ${data.clusterColor.main}`
-            : `0 2px 4px rgba(0,0,0,0.1)`,
+            : data.isDemoMode
+              ? '0 0 8px rgba(255,255,255,0.5)'
+              : '0 2px 4px rgba(0,0,0,0.1)',
         }}
-      >
-        <Handle type="target" position={Position.Top} className="opacity-0" />
-        <Handle type="source" position={Position.Bottom} className="opacity-0" />
-      </div>
+      />
+      {/* 중앙에 연결되는 핸들 */}
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          opacity: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        style={{
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          opacity: 0,
+          pointerEvents: 'none'
+        }}
+      />
     </div>
   );
 }
@@ -166,43 +200,56 @@ interface NetworkViewInnerProps {
 }
 
 function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
-  const { highlightedNodeId, setHighlightedNodeId } = useAppStore();
+  const { highlightedNodeId, setHighlightedNodeId, isDemoMode } = useAppStore();
   const [edgeOpacity, setEdgeOpacity] = useState(1);
   const basePositionsRef = useRef<Record<string, { x: number; y: number }>>({});
   const centerRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const lastZoomRef = useRef<number>(1);
   const isInitializedRef = useRef(false);
 
-  const { data: graphData, isLoading, error } = useQuery({
+  const { data: serverGraphData, isLoading, error } = useQuery({
     queryKey: ['graph'],
     queryFn: () => getGraphData(),
     refetchInterval: 30000,
+    enabled: !isDemoMode, // 데모 모드에서는 서버 호출 안함
   });
+
+  // 데모 모드면 데모 데이터, 아니면 서버 데이터 사용
+  const graphData = isDemoMode ? demoGraphData : serverGraphData;
 
   const { initialNodes, initialEdges, clusterCount } = useMemo(() => {
     if (!graphData?.nodes || !graphData?.edges) {
       return { initialNodes: [], initialEdges: [], clusterCount: 0 };
     }
 
-    // 먼저 강한 연결 기준으로 클러스터링 수행
-    const clusters = findClusters(graphData.nodes, graphData.edges);
+    // 데모 모드: 명시적 클러스터 매핑 사용, 일반 모드: Union-Find 클러스터링
+    const clusters: Record<string, number> = isDemoMode
+      ? nodeClusterMap
+      : findClusters(graphData.nodes, graphData.edges);
 
-    // 같은 클러스터(강한 연결)와 다른 클러스터(약한 연결) 분리
-    const sameClusterEdges = graphData.edges.filter(edge =>
-      clusters[edge.source] === clusters[edge.target]
-    );
-    const crossClusterEdges = graphData.edges.filter(edge =>
-      clusters[edge.source] !== clusters[edge.target]
-    );
+    // 데모 모드: 엣지는 이미 클러스터 간 연결만 있음
+    // 일반 모드: 클러스터 간 연결만 필터링
+    let filteredEdges = graphData.edges;
 
-    // 약한 연결(클러스터 간)은 상위 20%만 유지
-    const WEAK_EDGE_KEEP_RATIO = 0.20;
-    const sortedCrossEdges = [...crossClusterEdges].sort((a, b) => b.weight - a.weight);
-    const keepCount = Math.max(1, Math.floor(sortedCrossEdges.length * WEAK_EDGE_KEEP_RATIO));
-    const topCrossClusterEdges = sortedCrossEdges.slice(0, keepCount);
+    if (!isDemoMode) {
+      // 같은 클러스터(강한 연결)와 다른 클러스터(약한 연결) 분리
+      const sameClusterEdges = graphData.edges.filter(edge =>
+        clusters[edge.source] === clusters[edge.target]
+      );
+      const crossClusterEdges = graphData.edges.filter(edge =>
+        clusters[edge.source] !== clusters[edge.target]
+      );
 
-    // 강한 연결 전체 + 약한 연결 상위 20% 병합
-    const filteredEdges = [...sameClusterEdges, ...topCrossClusterEdges];
+      // 약한 연결(클러스터 간)은 상위 20%만 유지
+      const WEAK_EDGE_KEEP_RATIO = 0.20;
+      const sortedCrossEdges = [...crossClusterEdges].sort((a, b) => b.weight - a.weight);
+      const keepCount = Math.max(1, Math.floor(sortedCrossEdges.length * WEAK_EDGE_KEEP_RATIO));
+      const topCrossClusterEdges = sortedCrossEdges.slice(0, keepCount);
+
+      // 강한 연결 전체 + 약한 연결 상위 20% 병합
+      filteredEdges = [...sameClusterEdges, ...topCrossClusterEdges];
+    }
+
     const uniqueClusterIds = [...new Set(Object.values(clusters))];
     const clusterCount = uniqueClusterIds.length;
 
@@ -223,33 +270,48 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
       clusterGroups[clusterId].push(nodeId);
     });
 
-    // 클러스터 중심점 계산 (무작위 산개 배치)
+    // 클러스터 중심점 계산
     const clusterCenters: Record<number, { x: number; y: number }> = {};
 
-    // 시드 기반 무작위 위치 (일관된 결과를 위해)
-    const clusterPositions = [
-      { x: 150, y: 200 },   // 좌상단
-      { x: 650, y: 150 },   // 우상단
-      { x: 400, y: 450 },   // 중앙 하단
-      { x: 100, y: 550 },   // 좌하단
-      { x: 700, y: 500 },   // 우하단
-      { x: 350, y: 100 },   // 상단 중앙
-      { x: 550, y: 300 },   // 우측 중앙
-      { x: 200, y: 380 },   // 좌측 중앙
+    // 데모 모드: 2x3 그리드 배치 (엣지 교차 최소화)
+    // 상단: 0(AI) - 5(데이터) - 1(웹)
+    // 하단: 2(창작) - 4(학습) - 3(비즈니스)
+    const demoClusterPositions: Record<number, { x: number; y: number }> = {
+      0: { x: 150, y: 180 },   // AI/ML - 좌상
+      5: { x: 400, y: 150 },   // 데이터 - 중상
+      1: { x: 650, y: 180 },   // 웹개발 - 우상
+      2: { x: 150, y: 450 },   // 창작 - 좌하
+      4: { x: 400, y: 480 },   // 학습 - 중하
+      3: { x: 650, y: 450 },   // 비즈니스 - 우하
+    };
+
+    // 일반 모드: 원형 배치
+    const generalClusterPositions = [
+      { x: 400, y: 120 },   // 상단 중앙
+      { x: 650, y: 250 },   // 우상단
+      { x: 650, y: 450 },   // 우하단
+      { x: 400, y: 550 },   // 하단 중앙
+      { x: 150, y: 450 },   // 좌하단
+      { x: 150, y: 250 },   // 좌상단
+      { x: 400, y: 330 },   // 중앙
+      { x: 550, y: 330 },   // 우측 중앙
     ];
 
-    uniqueClusterIds.forEach((clusterId, index) => {
-      const pos = clusterPositions[index % clusterPositions.length];
-      // 클러스터 ID 기반 약간의 오프셋 추가
-      const offsetX = (clusterId * 37) % 60 - 30;
-      const offsetY = (clusterId * 53) % 60 - 30;
-      clusterCenters[clusterId] = {
-        x: pos.x + offsetX,
-        y: pos.y + offsetY,
-      };
+    uniqueClusterIds.forEach((clusterId) => {
+      if (isDemoMode && demoClusterPositions[clusterId]) {
+        clusterCenters[clusterId] = demoClusterPositions[clusterId];
+      } else {
+        const pos = generalClusterPositions[clusterId % generalClusterPositions.length];
+        const offsetX = (clusterId * 37) % 40 - 20;
+        const offsetY = (clusterId * 53) % 40 - 20;
+        clusterCenters[clusterId] = {
+          x: pos.x + offsetX,
+          y: pos.y + offsetY,
+        };
+      }
     });
 
-    // 노드 위치 계산 (개별 노드가 구분되도록 충분한 간격)
+    // 노드 위치 계산
     const nodePositions: Record<string, { x: number; y: number }> = {};
 
     Object.entries(clusterGroups).forEach(([clusterIdStr, nodeIds]) => {
@@ -258,24 +320,45 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
       const count = nodeIds.length;
 
       nodeIds.forEach((nodeId, index) => {
-        const connections = connectionCounts[nodeId] || 0;
-
         if (count === 1) {
           nodePositions[nodeId] = { x: center.x, y: center.y };
-        } else {
-          // 노드 수에 따라 반경 계산 (더 많은 노드 = 더 넓게)
-          const baseRadius = Math.max(60, count * 15);
+        } else if (isDemoMode) {
+          // 데모 모드: 더 컴팩트한 원형 배치
+          const baseRadius = 55 + count * 3; // 작은 기본 반경
 
-          // 연결 많은 노드일수록 중앙에
+          // 동심원 배치 (안쪽 → 바깥쪽)
+          const innerCount = Math.min(count, 4);
+          const outerCount = count - innerCount;
+
+          if (index < innerCount) {
+            // 안쪽 원 (4개 이하)
+            const angle = (index / innerCount) * Math.PI * 2 - Math.PI / 2;
+            const radius = innerCount === 1 ? 0 : baseRadius * 0.4;
+            nodePositions[nodeId] = {
+              x: center.x + Math.cos(angle) * radius,
+              y: center.y + Math.sin(angle) * radius,
+            };
+          } else {
+            // 바깥쪽 원
+            const outerIndex = index - innerCount;
+            const angle = (outerIndex / outerCount) * Math.PI * 2 - Math.PI / 2;
+            const radius = baseRadius * 0.85;
+            nodePositions[nodeId] = {
+              x: center.x + Math.cos(angle) * radius,
+              y: center.y + Math.sin(angle) * radius,
+            };
+          }
+        } else {
+          // 일반 모드: 골든 앵글 분포
+          const connections = connectionCounts[nodeId] || 0;
+          const baseRadius = Math.max(60, count * 15);
           const normalizedConnections = connections / maxConnections;
           const radiusMultiplier = 0.3 + (1 - normalizedConnections) * 0.7;
           const radius = baseRadius * radiusMultiplier;
 
-          // 골든 앵글로 균등 분포
           const goldenAngle = Math.PI * (3 - Math.sqrt(5));
           const angle = index * goldenAngle;
 
-          // 약간의 지터
           const jitterX = ((nodeId.charCodeAt(nodeId.length - 1) % 16) - 8);
           const jitterY = ((nodeId.charCodeAt(nodeId.length - 2) % 16) - 8);
 
@@ -289,12 +372,22 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
 
     const nodes: FlowNode[] = graphData.nodes.map((node: GraphNode) => {
       const clusterId = clusters[node.id] || 0;
-      const clusterColor = clusterColors[clusterId % clusterColors.length];
+      // 데모 모드: 모든 노드 흰색, 일반 모드: 클러스터별 색상
+      const clusterColor = isDemoMode
+        ? demoNodeColor
+        : clusterColors[clusterId % clusterColors.length];
       const position = nodePositions[node.id] || { x: 0, y: 0 };
 
-      // 연결 수에 따른 크기 (12px ~ 36px)
-      const connections = connectionCounts[node.id] || 0;
-      const size = 12 + (connections / maxConnections) * 24;
+      // 데모 모드: 다양한 크기 (6~16px), 일반 모드: 연결 수에 따른 크기
+      let size = 20;
+      if (isDemoMode) {
+        // 노드 ID 기반 랜덤 크기 (일관성 유지)
+        const hash = node.id.charCodeAt(node.id.length - 1);
+        size = 6 + (hash % 11); // 6~16px 범위
+      } else {
+        const connections = connectionCounts[node.id] || 0;
+        size = 12 + (connections / maxConnections) * 24;
+      }
 
       return {
         id: node.id,
@@ -306,6 +399,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
           isHighlighted: node.id === highlightedNodeId,
           clusterColor,
           size,
+          isDemoMode,
         },
       };
     });
@@ -321,17 +415,19 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
         const isConnectedToHighlighted = highlightedNodeId &&
           (edge.source === highlightedNodeId || edge.target === highlightedNodeId);
 
-        // 기본: 같은 클러스터 연결은 숨김 (opacity: 0)
-        // 선택된 노드의 연결은 진하게 표시
         let opacity = 0;
         let strokeWidth = 1;
 
         if (isConnectedToHighlighted) {
           // 선택된 노드와 연결된 엣지: 진하게 표시
-          opacity = 1;
-          strokeWidth = 2;
+          opacity = isDemoMode ? 0.8 : 1;
+          strokeWidth = isDemoMode ? 1.5 : 3;
+        } else if (isDemoMode) {
+          // 데모 모드: 얇고 연한 선 (이미지 스타일)
+          opacity = 0.25;
+          strokeWidth = 0.5;
         } else if (!isSameCluster) {
-          // 약한 연결 (클러스터 간): 연하게 표시
+          // 일반 모드 약한 연결 (클러스터 간): 연하게 표시
           opacity = 0.5;
           strokeWidth = 1;
         }
@@ -342,7 +438,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
           target: edge.target,
           type: 'custom',
           style: {
-            stroke: '#9ca3af', // 회색 통일
+            stroke: isDemoMode ? '#7d9cba' : '#9ca3af', // 데모: 연한 파란 회색, 일반: 회색
             strokeWidth,
             opacity,
           },
@@ -350,7 +446,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
       });
 
     return { initialNodes: nodes, initialEdges: edges, clusterCount };
-  }, [graphData, highlightedNodeId]);
+  }, [graphData, highlightedNodeId, isDemoMode]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -454,7 +550,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
     [setHighlightedNodeId, onNodeClick]
   );
 
-  if (isLoading) {
+  if (isLoading && !isDemoMode) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -465,7 +561,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
     );
   }
 
-  if (error) {
+  if (error && !isDemoMode) {
     console.error('NetworkView error:', error);
     return (
       <div className="h-full flex items-center justify-center bg-gray-50">
@@ -489,7 +585,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full" style={{ backgroundColor: isDemoMode ? '#1a2744' : '#f8fafc' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -503,20 +599,22 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
         nodesConnectable={false}
         fitView
         fitViewOptions={{ padding: 0.2 }}
+        style={{ backgroundColor: isDemoMode ? '#1a2744' : '#f8fafc' }}
       >
-        <Background color="#f8fafc" gap={40} size={1} />
-        <Controls className="bg-white/80 backdrop-blur-sm" />
+        {!isDemoMode && <Background color="#f8fafc" gap={40} size={1} />}
+        <Controls className={isDemoMode ? "bg-slate-800/80 backdrop-blur-sm [&>button]:text-white [&>button]:border-slate-600" : "bg-white/80 backdrop-blur-sm"} />
         <MiniMap
           nodeColor={(node) => {
             const data = node.data as CustomNodeProps['data'];
             return data.clusterColor?.main || '#94a3b8';
           }}
-          maskColor="rgba(255, 255, 255, 0.9)"
-          style={{ backgroundColor: '#f8fafc' }}
+          maskColor={isDemoMode ? "rgba(26, 39, 68, 0.9)" : "rgba(255, 255, 255, 0.9)"}
+          style={{ backgroundColor: isDemoMode ? '#1a2744' : '#f8fafc' }}
         />
       </ReactFlow>
 
-      {/* 범례 */}
+      {/* 범례 - 데모 모드에서는 숨김 */}
+      {!isDemoMode && (
       <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-100">
         <p className="text-xs font-semibold text-gray-700 mb-3">클러스터 ({clusterCount}개)</p>
         <div className="space-y-2">
@@ -534,6 +632,7 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
           )}
         </div>
       </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useAppStore } from '@/store/useAppStore';
 
 // 리뷰 데이터
 const reviews = [
@@ -190,6 +191,14 @@ function CelestialSphereCanvas() {
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { setDemoMode, clearChatMessages } = useAppStore();
+
+  const handleDemoLogin = () => {
+    // 데모 모드 활성화 및 이전 채팅 기록 초기화
+    setDemoMode(true);
+    clearChatMessages();
+    navigate('/app');
+  };
 
   return (
     <div className="overflow-x-hidden">
@@ -214,7 +223,7 @@ export default function Landing() {
             SIGN UP
           </button>
           <button
-            onClick={() => navigate('/app')}
+            onClick={handleDemoLogin}
             className="glass-btn font-english text-lg tracking-wider"
           >
             LOG IN

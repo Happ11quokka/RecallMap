@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Send, Bot, User, Loader2, ExternalLink } from 'lucide-react';
+import { Send, Bot, User, Loader2, ExternalLink, Sparkles } from 'lucide-react';
 import { sendChatMessage } from '@/api/agent';
 import { useAppStore } from '@/store/useAppStore';
+import { demoConversations } from '@/data/demoData';
 import type { ChatMessage, ReferencedNode } from '@/types';
 
 interface AgentChatProps {
@@ -11,8 +12,10 @@ interface AgentChatProps {
 
 export default function AgentChat({ onNodeClick }: AgentChatProps) {
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [usedDemoQuestions, setUsedDemoQuestions] = useState<Set<number>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { sessionId, chatMessages, addChatMessage, setHighlightedNodeId } = useAppStore();
+  const { sessionId, chatMessages, addChatMessage, setHighlightedNodeId, isDemoMode } = useAppStore();
 
   const mutation = useMutation({
     mutationFn: (message: string) => sendChatMessage(message, sessionId),
@@ -47,6 +50,42 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
     setHighlightedNodeId(node.id);
     onNodeClick?.(node.id);
   };
+
+  // 데모 모드에서 버튼 클릭 시 자동 대화
+  const handleDemoQuestion = (index: number) => {
+    if (isTyping) return;
+
+    const conversation = demoConversations[index];
+
+    // 사용자 메시지 추가
+    const userMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      role: 'user',
+      content: conversation.question,
+      timestamp: new Date(),
+    };
+    addChatMessage(userMessage);
+    setUsedDemoQuestions(prev => new Set([...prev, index]));
+
+    // 타이핑 효과
+    setIsTyping(true);
+
+    // 1.5초 후 AI 응답 추가
+    setTimeout(() => {
+      const assistantMessage: ChatMessage = {
+        id: `msg-${Date.now() + 1}`,
+        role: 'assistant',
+        content: conversation.answer,
+        referenced_nodes: conversation.referencedNodes,
+        timestamp: new Date(),
+      };
+      addChatMessage(assistantMessage);
+      setIsTyping(false);
+    }, 1500);
+  };
+
+  // 사용 가능한 데모 질문들 (아직 사용하지 않은 것들)
+  const availableDemoQuestions = demoConversations.filter((_, index) => !usedDemoQuestions.has(index));
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -108,7 +147,30 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
     <div className="flex flex-col h-full bg-white">
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {chatMessages.length === 0 && (
+        {chatMessages.length === 0 && isDemoMode && (
+          <div className="text-center py-6">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Sparkles className="w-5 h-5 text-nova-500" />
+              <span className="text-sm font-medium text-gray-700">데모 모드</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-6">
+              아래 버튼을 클릭해서 AI 에이전트를 체험해보세요!
+            </p>
+            <div className="space-y-2">
+              {demoConversations.map((conv, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDemoQuestion(index)}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-nova-50 to-purple-50 hover:from-nova-100 hover:to-purple-100 border border-nova-200 rounded-xl text-left text-sm text-gray-700 transition-all hover:shadow-md"
+                >
+                  <span className="font-medium">{conv.question}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {chatMessages.length === 0 && !isDemoMode && (
           <div className="text-center text-gray-400 py-8">
             <Bot className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p className="text-sm">무엇이든 물어보세요!</p>
@@ -150,7 +212,7 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
           </div>
         ))}
 
-        {mutation.isPending && (
+        {(mutation.isPending || isTyping) && (
           <div className="flex gap-3">
             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
               <Bot className="w-4 h-4 text-gray-600" />
@@ -161,29 +223,62 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
           </div>
         )}
 
+        {/* 데모 모드: 대화 후 추가 질문 버튼 */}
+        {isDemoMode && chatMessages.length > 0 && availableDemoQuestions.length > 0 && !isTyping && (
+          <div className="pt-4 border-t border-gray-100">
+            <p className="text-xs text-gray-400 mb-3 text-center">더 궁금한 게 있으신가요?</p>
+            <div className="space-y-2">
+              {availableDemoQuestions.slice(0, 3).map((conv, _) => {
+                const originalIndex = demoConversations.findIndex(d => d.question === conv.question);
+                return (
+                  <button
+                    key={originalIndex}
+                    onClick={() => handleDemoQuestion(originalIndex)}
+                    className="w-full px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-left text-sm text-gray-600 transition-colors"
+                  >
+                    {conv.question}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-100">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="질문을 입력하세요..."
-            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-nova-500 focus:border-transparent"
-            disabled={mutation.isPending}
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || mutation.isPending}
-            className="px-4 py-2 bg-nova-600 text-white rounded-lg hover:bg-nova-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-          >
-            <Send className="w-5 h-5" />
-          </button>
+      {/* Input - 데모 모드에서는 숨김 */}
+      {!isDemoMode && (
+        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-100">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="질문을 입력하세요..."
+              className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-nova-500 focus:border-transparent"
+              disabled={mutation.isPending}
+            />
+            <button
+              type="submit"
+              disabled={!input.trim() || mutation.isPending}
+              className="px-4 py-2 bg-nova-600 text-white rounded-lg hover:bg-nova-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* 데모 모드 안내 */}
+      {isDemoMode && (
+        <div className="p-3 border-t border-gray-100 bg-gradient-to-r from-nova-50 to-purple-50">
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+            <Sparkles className="w-3 h-3 text-nova-500" />
+            <span>데모 모드에서는 미리 준비된 질문으로 체험할 수 있습니다</span>
+          </div>
         </div>
-      </form>
+      )}
     </div>
   );
 }

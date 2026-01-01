@@ -5,6 +5,10 @@ interface AppState {
   // Session
   sessionId: string;
 
+  // Demo Mode
+  isDemoMode: boolean;
+  setDemoMode: (value: boolean) => void;
+
   // Nodes
   nodes: Node[];
   selectedNode: Node | null;
@@ -36,6 +40,10 @@ const generateSessionId = () => `session_${Date.now()}_${Math.random().toString(
 export const useAppStore = create<AppState>((set) => ({
   // Session
   sessionId: generateSessionId(),
+
+  // Demo Mode
+  isDemoMode: false,
+  setDemoMode: (value) => set({ isDemoMode: value }),
 
   // Nodes
   nodes: [],
