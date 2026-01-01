@@ -37,8 +37,15 @@ const clusterColors = [
   { main: '#95D5B2', light: 'rgba(149, 213, 178, 0.3)' }, // 연두
 ];
 
-// 데모용 흰색 색상
-const demoNodeColor = { main: '#ffffff', light: 'rgba(255, 255, 255, 0.3)' };
+// 데모용 클러스터별 색상 (스크린샷 스타일 - 파스텔톤)
+const demoClusterColors = [
+  { main: '#ffffff', light: 'rgba(255, 255, 255, 0.3)' },      // 클러스터 0: 흰색
+  { main: '#DDA0DD', light: 'rgba(221, 160, 221, 0.3)' },      // 클러스터 1: 연보라색
+  { main: '#98FB98', light: 'rgba(152, 251, 152, 0.3)' },      // 클러스터 2: 연두색
+  { main: '#FFB6C1', light: 'rgba(255, 182, 193, 0.3)' },      // 클러스터 3: 분홍색
+  { main: '#FFD700', light: 'rgba(255, 215, 0, 0.3)' },        // 클러스터 4: 노란색
+  { main: '#87CEEB', light: 'rgba(135, 206, 235, 0.3)' },      // 클러스터 5: 하늘색
+];
 
 interface CustomNodeProps {
   data: {
@@ -372,9 +379,9 @@ function NetworkViewInner({ onNodeClick }: NetworkViewInnerProps) {
 
     const nodes: FlowNode[] = graphData.nodes.map((node: GraphNode) => {
       const clusterId = clusters[node.id] || 0;
-      // 데모 모드: 모든 노드 흰색, 일반 모드: 클러스터별 색상
+      // 데모 모드: 클러스터별 파스텔 색상, 일반 모드: 클러스터별 색상
       const clusterColor = isDemoMode
-        ? demoNodeColor
+        ? demoClusterColors[clusterId % demoClusterColors.length]
         : clusterColors[clusterId % clusterColors.length];
       const position = nodePositions[node.id] || { x: 0, y: 0 };
 

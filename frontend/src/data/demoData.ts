@@ -2,73 +2,73 @@ import type { GraphData, ReferencedNode } from '@/types';
 
 // 클러스터 ID 매핑 (노드별 클러스터 지정)
 export const nodeClusterMap: Record<string, number> = {
-  // 클러스터 0: AI/머신러닝 (8개)
+  // 클러스터 0: 한국 현대시 (8개)
   demo_1: 0, demo_2: 0, demo_3: 0, demo_4: 0, demo_5: 0, demo_6: 0, demo_7: 0, demo_8: 0,
-  // 클러스터 1: 웹 개발 (7개)
+  // 클러스터 1: 한국 현대소설 (7개)
   demo_9: 1, demo_10: 1, demo_11: 1, demo_12: 1, demo_13: 1, demo_14: 1, demo_15: 1,
-  // 클러스터 2: 창작/글쓰기 (6개)
+  // 클러스터 2: 고전문학 (6개)
   demo_16: 2, demo_17: 2, demo_18: 2, demo_19: 2, demo_20: 2, demo_21: 2,
-  // 클러스터 3: 비즈니스/업무 (6개)
+  // 클러스터 3: 문학비평/이론 (6개)
   demo_22: 3, demo_23: 3, demo_24: 3, demo_25: 3, demo_26: 3, demo_27: 3,
-  // 클러스터 4: 학습/자기계발 (6개)
+  // 클러스터 4: 세계문학 (6개)
   demo_28: 4, demo_29: 4, demo_30: 4, demo_31: 4, demo_32: 4, demo_33: 4,
-  // 클러스터 5: 데이터/분석 (7개)
+  // 클러스터 5: 인문학/철학 (7개)
   demo_34: 5, demo_35: 5, demo_36: 5, demo_37: 5, demo_38: 5, demo_39: 5, demo_40: 5,
 };
 
-// 데모용 40개 노드 데이터 - 다양한 주제의 실제 콘텐츠
+// 데모용 40개 노드 데이터 - 인문학/한국 현대문학 테마
 export const demoNodes = [
-  // 클러스터 0: AI/머신러닝 관련 (8개)
-  { id: 'demo_1', label: 'GPT-4 아키텍처', summary: 'GPT-4의 트랜스포머 아키텍처와 어텐션 메커니즘에 대한 분석', keywords: ['GPT-4', 'Transformer', 'Attention', 'LLM'], project: 'tech' },
-  { id: 'demo_2', label: 'RAG 시스템 구현', summary: 'Retrieval-Augmented Generation을 활용한 지식 기반 AI 시스템 구현 방법', keywords: ['RAG', 'Vector DB', 'Embedding', 'LangChain'], project: 'tech' },
-  { id: 'demo_3', label: '프롬프트 엔지니어링', summary: '효과적인 프롬프트 작성을 위한 기법과 베스트 프랙티스', keywords: ['Prompt', 'Engineering', 'Few-shot', 'Chain-of-thought'], project: 'tech' },
-  { id: 'demo_4', label: '벡터 임베딩 이해', summary: '텍스트를 벡터로 변환하는 임베딩 기술과 유사도 검색 원리', keywords: ['Embedding', 'Vector', 'Similarity', 'Cosine'], project: 'tech' },
-  { id: 'demo_5', label: 'Fine-tuning 가이드', summary: 'LLM 파인튜닝을 위한 데이터 준비부터 학습까지의 전체 과정', keywords: ['Fine-tuning', 'LoRA', 'PEFT', 'Training'], project: 'tech' },
-  { id: 'demo_6', label: 'AI 에이전트 설계', summary: '자율적으로 작업을 수행하는 AI 에이전트의 설계 패턴과 구현', keywords: ['Agent', 'Autonomous', 'Planning', 'Tool-use'], project: 'tech' },
-  { id: 'demo_7', label: 'LLM 평가 지표', summary: 'BLEU, ROUGE, Perplexity 등 언어 모델 성능 평가 방법론', keywords: ['Evaluation', 'BLEU', 'ROUGE', 'Benchmark'], project: 'tech' },
-  { id: 'demo_8', label: 'Hallucination 방지', summary: 'LLM의 환각 현상을 줄이기 위한 기술적 접근 방법', keywords: ['Hallucination', 'Grounding', 'Factuality', 'RAG'], project: 'tech' },
+  // 클러스터 0: 한국 현대시 (8개)
+  { id: 'demo_1', label: '윤동주의 서시', summary: '"죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를" - 저항시인의 순수한 영혼', keywords: ['윤동주', '서시', '저항시', '순수'], project: 'literature' },
+  { id: 'demo_2', label: '김소월의 진달래꽃', summary: '이별의 정한, 한국인의 보편적 감성을 담은 민요적 서정시', keywords: ['김소월', '진달래꽃', '민요시', '이별'], project: 'literature' },
+  { id: 'demo_3', label: '정지용의 향수', summary: '선명한 이미지와 음악적 리듬으로 그린 고향에 대한 그리움', keywords: ['정지용', '향수', '이미지즘', '고향'], project: 'literature' },
+  { id: 'demo_4', label: '백석의 나와 나타샤', summary: '토속적 언어와 가난한 사랑을 노래한 북방 정서', keywords: ['백석', '나타샤', '토속어', '북방'], project: 'literature' },
+  { id: 'demo_5', label: '한용운의 님의 침묵', summary: '님의 부재를 통해 역설적으로 님을 노래한 저항과 사랑의 시', keywords: ['한용운', '님의침묵', '저항', '불교'], project: 'literature' },
+  { id: 'demo_6', label: '서정주의 국화 옆에서', summary: '동양적 명상과 삶의 원숙함을 노래한 서정시', keywords: ['서정주', '국화', '서정', '명상'], project: 'literature' },
+  { id: 'demo_7', label: '이육사의 광야', summary: '일제강점기 암흑 속에서 빛나는 저항정신과 희망의 노래', keywords: ['이육사', '광야', '저항시', '희망'], project: 'literature' },
+  { id: 'demo_8', label: '김수영의 풀', summary: '4.19 이후 민주주의를 향한 열망과 생명력을 담은 참여시', keywords: ['김수영', '풀', '참여시', '민주주의'], project: 'literature' },
 
-  // 클러스터 1: 웹 개발 관련 (7개)
-  { id: 'demo_9', label: 'React 18 신기능', summary: 'Concurrent Mode, Suspense, Server Components 등 React 18의 주요 변화', keywords: ['React', 'Concurrent', 'Suspense', 'RSC'], project: 'tech' },
-  { id: 'demo_10', label: 'Next.js App Router', summary: 'Next.js 13+ App Router의 새로운 라우팅 패러다임과 사용법', keywords: ['Next.js', 'App Router', 'RSC', 'Streaming'], project: 'tech' },
-  { id: 'demo_11', label: 'TypeScript 타입 시스템', summary: 'TypeScript의 고급 타입 기능: 제네릭, 조건부 타입, 매핑 타입', keywords: ['TypeScript', 'Generic', 'Type', 'Inference'], project: 'tech' },
-  { id: 'demo_12', label: 'TailwindCSS 활용', summary: 'Utility-first CSS 프레임워크 TailwindCSS의 효율적인 사용법', keywords: ['Tailwind', 'CSS', 'Utility', 'Design'], project: 'tech' },
-  { id: 'demo_13', label: 'REST vs GraphQL', summary: 'REST API와 GraphQL의 장단점 비교 및 선택 기준', keywords: ['REST', 'GraphQL', 'API', 'Query'], project: 'tech' },
-  { id: 'demo_14', label: '웹 성능 최적화', summary: 'Core Web Vitals 개선을 위한 프론트엔드 최적화 전략', keywords: ['Performance', 'CWV', 'Optimization', 'Lighthouse'], project: 'tech' },
-  { id: 'demo_15', label: '상태 관리 비교', summary: 'Redux, Zustand, Jotai, Recoil 등 상태 관리 라이브러리 비교', keywords: ['State', 'Redux', 'Zustand', 'Jotai'], project: 'tech' },
+  // 클러스터 1: 한국 현대소설 (7개)
+  { id: 'demo_9', label: '한강의 채식주의자', summary: '폭력적 세계에 대한 거부, 식물이 되고자 하는 여성의 이야기', keywords: ['한강', '채식주의자', '맨부커상', '폭력'], project: 'literature' },
+  { id: 'demo_10', label: '황석영의 객지', summary: '산업화 시대 노동자의 삶과 소외를 그린 리얼리즘 소설', keywords: ['황석영', '객지', '노동문학', '리얼리즘'], project: 'literature' },
+  { id: 'demo_11', label: '박완서의 나목', summary: '6.25 전쟁의 상처와 생존, 예술가의 삶을 그린 자전적 소설', keywords: ['박완서', '나목', '전쟁', '여성'], project: 'literature' },
+  { id: 'demo_12', label: '조세희의 난장이가 쏘아올린 작은 공', summary: '산업화의 그늘, 소외된 자들의 아픔을 담은 연작소설', keywords: ['조세희', '난장이', '산업화', '소외'], project: 'literature' },
+  { id: 'demo_13', label: '이청준의 당신들의 천국', summary: '소록도를 배경으로 한 권력과 이상사회에 대한 우화', keywords: ['이청준', '당신들의천국', '권력', '우화'], project: 'literature' },
+  { id: 'demo_14', label: '최인훈의 광장', summary: '분단 현실 속 이데올로기의 허상과 개인의 실존을 탐구', keywords: ['최인훈', '광장', '분단', '실존'], project: 'literature' },
+  { id: 'demo_15', label: '김승옥의 무진기행', summary: '현대인의 고독과 일상으로부터의 탈출을 그린 감각적 소설', keywords: ['김승옥', '무진기행', '고독', '감각'], project: 'literature' },
 
-  // 클러스터 2: 창작/글쓰기 관련 (6개)
-  { id: 'demo_16', label: '스토리텔링 구조', summary: '3막 구조, 영웅의 여정 등 이야기 전개의 기본 프레임워크', keywords: ['Story', 'Structure', 'Narrative', 'Plot'], project: 'personal' },
-  { id: 'demo_17', label: '캐릭터 아크 설계', summary: '캐릭터의 성장과 변화를 설득력 있게 그리는 방법', keywords: ['Character', 'Arc', 'Development', 'Growth'], project: 'personal' },
-  { id: 'demo_18', label: '대화문 작성법', summary: '자연스럽고 캐릭터성을 드러내는 대화문 작성 기술', keywords: ['Dialogue', 'Writing', 'Voice', 'Character'], project: 'personal' },
-  { id: 'demo_19', label: '세계관 구축', summary: '일관성 있는 가상 세계를 만들기 위한 설정과 규칙', keywords: ['Worldbuilding', 'Setting', 'Lore', 'Consistency'], project: 'personal' },
-  { id: 'demo_20', label: '글쓰기 루틴', summary: '꾸준히 글을 쓰기 위한 습관과 환경 만들기', keywords: ['Writing', 'Routine', 'Habit', 'Productivity'], project: 'personal' },
-  { id: 'demo_21', label: '퇴고와 수정', summary: '초고를 다듬어 완성도 높은 글로 만드는 퇴고 과정', keywords: ['Editing', 'Revision', 'Draft', 'Polish'], project: 'personal' },
+  // 클러스터 2: 고전문학 (6개)
+  { id: 'demo_16', label: '춘향전', summary: '신분을 초월한 사랑과 절개, 한국 고전소설의 대표작', keywords: ['춘향전', '판소리', '사랑', '절개'], project: 'literature' },
+  { id: 'demo_17', label: '홍길동전', summary: '허균이 쓴 최초의 한글소설, 신분제에 대한 저항', keywords: ['홍길동전', '허균', '신분제', '이상사회'], project: 'literature' },
+  { id: 'demo_18', label: '구운몽', summary: '불교적 세계관을 바탕으로 한 인생무상과 깨달음의 서사', keywords: ['구운몽', '김만중', '불교', '꿈'], project: 'literature' },
+  { id: 'demo_19', label: '심청전', summary: '효녀 심청의 희생과 보은, 한국적 효 사상의 결정체', keywords: ['심청전', '효', '판소리', '희생'], project: 'literature' },
+  { id: 'demo_20', label: '흥부전', summary: '형제간의 우애와 권선징악, 민중의 꿈을 담은 이야기', keywords: ['흥부전', '판소리', '권선징악', '민중'], project: 'literature' },
+  { id: 'demo_21', label: '토끼전', summary: '용궁에 간 토끼의 지략, 풍자와 해학이 넘치는 우화소설', keywords: ['토끼전', '우화', '풍자', '해학'], project: 'literature' },
 
-  // 클러스터 3: 비즈니스/업무 관련 (6개)
-  { id: 'demo_22', label: '애자일 스크럼', summary: '스프린트, 데일리 스탠드업 등 애자일 방법론의 핵심 요소', keywords: ['Agile', 'Scrum', 'Sprint', 'Standup'], project: 'work' },
-  { id: 'demo_23', label: 'OKR 설정 방법', summary: '목표와 핵심 결과를 효과적으로 설정하고 추적하는 방법', keywords: ['OKR', 'Goals', 'KPI', 'Alignment'], project: 'work' },
-  { id: 'demo_24', label: '효과적인 회의', summary: '시간을 아끼고 결과를 내는 회의 운영 노하우', keywords: ['Meeting', 'Facilitation', 'Agenda', 'Action'], project: 'work' },
-  { id: 'demo_25', label: '코드 리뷰 문화', summary: '건설적인 코드 리뷰를 위한 가이드라인과 팁', keywords: ['Code Review', 'Feedback', 'PR', 'Best Practice'], project: 'work' },
-  { id: 'demo_26', label: '기술 문서화', summary: 'README, API 문서, 아키텍처 문서 작성 가이드', keywords: ['Documentation', 'README', 'API Doc', 'Architecture'], project: 'work' },
-  { id: 'demo_27', label: '온보딩 프로세스', summary: '신규 팀원이 빠르게 적응할 수 있는 온보딩 설계', keywords: ['Onboarding', 'Training', 'Ramp-up', 'Culture'], project: 'work' },
+  // 클러스터 3: 문학비평/이론 (6개)
+  { id: 'demo_22', label: '김현의 문학사회학', summary: '문학과 사회의 관계를 탐구한 비평적 시각', keywords: ['김현', '문학사회학', '비평', '사회'], project: 'theory' },
+  { id: 'demo_23', label: '백낙청의 민족문학론', summary: '분단시대의 문학적 과제와 민족문학의 방향 제시', keywords: ['백낙청', '민족문학', '분단', '리얼리즘'], project: 'theory' },
+  { id: 'demo_24', label: '서정시의 이론', summary: '서정시의 본질과 형식, 언어적 특성에 대한 연구', keywords: ['서정시', '시학', '언어', '형식'], project: 'theory' },
+  { id: 'demo_25', label: '한국 근대소설의 형성', summary: '개화기부터 일제강점기까지 한국 소설의 발전 과정', keywords: ['근대소설', '개화기', '형성', '발전'], project: 'theory' },
+  { id: 'demo_26', label: '문학과 이데올로기', summary: '문학 텍스트 속에 작동하는 이데올로기적 무의식 분석', keywords: ['이데올로기', '무의식', '텍스트', '분석'], project: 'theory' },
+  { id: 'demo_27', label: '탈식민주의 문학비평', summary: '식민지 경험과 문학, 그리고 탈식민적 주체성 탐구', keywords: ['탈식민주의', '식민지', '주체성', '비평'], project: 'theory' },
 
-  // 클러스터 4: 학습/자기계발 관련 (6개)
-  { id: 'demo_28', label: '효과적인 노트 테이킹', summary: '코넬 노트, 제텔카스텐 등 지식 정리 방법론', keywords: ['Note-taking', 'Zettelkasten', 'Cornell', 'PKM'], project: 'personal' },
-  { id: 'demo_29', label: '딥워크 실천', summary: '깊은 집중을 통한 생산성 향상 전략', keywords: ['Deep Work', 'Focus', 'Concentration', 'Productivity'], project: 'personal' },
-  { id: 'demo_30', label: '스페이스드 반복', summary: '장기 기억을 위한 간격 반복 학습법', keywords: ['Spaced Repetition', 'Memory', 'Anki', 'Learning'], project: 'personal' },
-  { id: 'demo_31', label: '마인드맵 활용', summary: '아이디어를 시각화하고 연결하는 마인드맵 기법', keywords: ['Mind Map', 'Visual', 'Brainstorm', 'Connection'], project: 'personal' },
-  { id: 'demo_32', label: '독서 노트 정리', summary: '책에서 얻은 인사이트를 체계적으로 정리하는 방법', keywords: ['Reading', 'Notes', 'Summary', 'Insight'], project: 'personal' },
-  { id: 'demo_33', label: '습관 형성', summary: '새로운 습관을 만들고 유지하는 과학적 접근법', keywords: ['Habit', 'Routine', 'Behavior', 'Atomic'], project: 'personal' },
+  // 클러스터 4: 세계문학 (6개)
+  { id: 'demo_28', label: '카프카의 변신', summary: '어느 날 벌레로 변해버린 남자, 실존적 소외의 우화', keywords: ['카프카', '변신', '실존', '소외'], project: 'literature' },
+  { id: 'demo_29', label: '도스토예프스키의 죄와 벌', summary: '살인자의 내면 탐구, 죄의식과 구원에 대한 심리소설', keywords: ['도스토예프스키', '죄와벌', '심리', '구원'], project: 'literature' },
+  { id: 'demo_30', label: '가브리엘 마르케스의 백년의 고독', summary: '부엔디아 가문의 100년, 마술적 리얼리즘의 정점', keywords: ['마르케스', '백년의고독', '마술적리얼리즘', '라틴아메리카'], project: 'literature' },
+  { id: 'demo_31', label: '버지니아 울프의 댈러웨이 부인', summary: '의식의 흐름 기법으로 그린 하루, 삶과 죽음의 명상', keywords: ['버지니아울프', '의식의흐름', '모더니즘', '여성'], project: 'literature' },
+  { id: 'demo_32', label: '알베르 카뮈의 이방인', summary: '태양 때문에 저지른 살인, 부조리한 세계 속 인간', keywords: ['카뮈', '이방인', '부조리', '실존주의'], project: 'literature' },
+  { id: 'demo_33', label: '헤르만 헤세의 데미안', summary: '자아를 찾아가는 싱클레어의 성장, 내면의 세계 탐구', keywords: ['헤세', '데미안', '성장', '자아'], project: 'literature' },
 
-  // 클러스터 5: 데이터/분석 관련 (7개)
-  { id: 'demo_34', label: 'SQL 쿼리 최적화', summary: '인덱스, 실행 계획을 활용한 SQL 성능 튜닝', keywords: ['SQL', 'Index', 'Query', 'Optimization'], project: 'tech' },
-  { id: 'demo_35', label: 'Python 데이터 분석', summary: 'Pandas, NumPy를 활용한 데이터 전처리와 분석', keywords: ['Python', 'Pandas', 'NumPy', 'Analysis'], project: 'tech' },
-  { id: 'demo_36', label: '데이터 시각화', summary: 'Matplotlib, Seaborn, Plotly를 활용한 효과적인 시각화', keywords: ['Visualization', 'Chart', 'Matplotlib', 'Plotly'], project: 'tech' },
-  { id: 'demo_37', label: 'A/B 테스트 설계', summary: '통계적으로 유의미한 A/B 테스트 설계와 분석', keywords: ['A/B Test', 'Statistics', 'Hypothesis', 'Significance'], project: 'work' },
-  { id: 'demo_38', label: '대시보드 설계', summary: '핵심 지표를 효과적으로 보여주는 대시보드 구성', keywords: ['Dashboard', 'KPI', 'Metrics', 'BI'], project: 'work' },
-  { id: 'demo_39', label: '데이터 파이프라인', summary: 'ETL/ELT 파이프라인 구축과 데이터 품질 관리', keywords: ['ETL', 'Pipeline', 'Airflow', 'Data Quality'], project: 'tech' },
-  { id: 'demo_40', label: '머신러닝 파이프라인', summary: 'MLOps를 위한 모델 학습, 배포, 모니터링 자동화', keywords: ['MLOps', 'Pipeline', 'Deployment', 'Monitoring'], project: 'tech' },
+  // 클러스터 5: 인문학/철학 (7개)
+  { id: 'demo_34', label: '니체의 차라투스트라', summary: '신은 죽었다 선언 이후, 초인과 영원회귀의 철학', keywords: ['니체', '차라투스트라', '초인', '영원회귀'], project: 'philosophy' },
+  { id: 'demo_35', label: '사르트르의 실존주의', summary: '실존은 본질에 앞선다, 자유와 책임의 철학', keywords: ['사르트르', '실존주의', '자유', '책임'], project: 'philosophy' },
+  { id: 'demo_36', label: '푸코의 권력 이론', summary: '규율권력과 생명권력, 근대 사회의 지식-권력 분석', keywords: ['푸코', '권력', '규율', '담론'], project: 'philosophy' },
+  { id: 'demo_37', label: '동양 사상과 문학', summary: '유불선 사상이 동아시아 문학에 미친 영향 연구', keywords: ['동양사상', '유교', '불교', '도교'], project: 'philosophy' },
+  { id: 'demo_38', label: '해석학과 문학', summary: '텍스트 이해의 방법론, 가다머와 리쾨르의 해석 이론', keywords: ['해석학', '가다머', '리쾨르', '텍스트'], project: 'philosophy' },
+  { id: 'demo_39', label: '미학의 기초', summary: '예술과 아름다움의 본질, 미적 경험에 대한 탐구', keywords: ['미학', '예술', '아름다움', '경험'], project: 'philosophy' },
+  { id: 'demo_40', label: '한국 철학사', summary: '조선 성리학에서 현대 철학까지 한국 사상의 흐름', keywords: ['한국철학', '성리학', '실학', '현대'], project: 'philosophy' },
 ];
 
 // 엣지 데이터 - 이미지처럼 네트워크 느낌의 많은 연결
@@ -161,145 +161,138 @@ export interface DemoConversation {
 
 export const demoConversations: DemoConversation[] = [
   {
-    question: 'AI 관련 자료를 정리해줘',
-    answer: `AI/머신러닝 관련 자료를 분석했습니다.
+    question: '한국 시 자료를 정리해줘',
+    answer: `한국 현대시 관련 자료를 분석했습니다.
 
-**핵심 주제 8개를 발견했습니다:**
+발견한 핵심 작품들:
 
-1. **LLM 기초**: GPT-4 아키텍처, 프롬프트 엔지니어링, 벡터 임베딩
-2. **실용 기술**: RAG 시스템, Fine-tuning, AI 에이전트 설계
-3. **품질 관리**: LLM 평가 지표, Hallucination 방지
+1. 저항과 순수: 윤동주의 서시 - 식민지 시대 지식인의 고뇌와 순수한 영혼
+2. 민요적 서정: 김소월의 진달래꽃 - 이별의 정한, 한국인의 보편적 감성
+3. 고향의 그리움: 정지용의 향수 - 선명한 이미지와 음악적 리듬
+4. 북방 정서: 백석의 나와 나타샤 - 토속적 언어와 가난한 사랑
 
-특히 RAG 시스템과 벡터 임베딩은 서로 밀접하게 연결되어 있어, 함께 학습하시면 좋을 것 같습니다.`,
+윤동주와 정지용의 시가 서정성에서 연결되어 있습니다.`,
     referencedNodes: [
-      { id: 'demo_1', title: 'GPT-4 아키텍처', link: '/nodes/demo_1' },
-      { id: 'demo_2', title: 'RAG 시스템 구현', link: '/nodes/demo_2' },
-      { id: 'demo_4', title: '벡터 임베딩 이해', link: '/nodes/demo_4' },
-      { id: 'demo_6', title: 'AI 에이전트 설계', link: '/nodes/demo_6' },
+      { id: 'demo_1', title: '윤동주의 서시', link: '/nodes/demo_1' },
+      { id: 'demo_2', title: '김소월의 진달래꽃', link: '/nodes/demo_2' },
+      { id: 'demo_3', title: '정지용의 향수', link: '/nodes/demo_3' },
+      { id: 'demo_4', title: '백석의 나와 나타샤', link: '/nodes/demo_4' },
     ],
   },
   {
-    question: '웹 개발 트렌드를 요약해줘',
-    answer: `최신 웹 개발 트렌드를 정리했습니다.
+    question: '한국 현대소설을 알려줘',
+    answer: `한국 현대소설의 주요 작품을 정리했습니다.
 
-**주요 기술 동향:**
+시대별 대표작:
 
-1. **React 생태계**: React 18의 Concurrent Mode와 Server Components가 핵심
-2. **Next.js**: App Router로 패러다임 전환, RSC와 스트리밍 지원
-3. **타입 안전성**: TypeScript의 고급 타입 시스템 활용 증가
-4. **성능 최적화**: Core Web Vitals 중심의 최적화 전략
+1. 분단문학: 최인훈의 광장 - 이데올로기의 허상과 개인의 실존
+2. 산업화 시대: 조세희의 난장이 - 소외된 자들의 아픔
+3. 여성문학: 박완서의 나목 - 전쟁의 상처와 생존
+4. 세계적 인정: 한강의 채식주의자 - 맨부커상 수상작
 
-React와 Next.js 자료가 강하게 연결되어 있습니다. 함께 살펴보시길 권장합니다.`,
+황석영과 조세희의 작품이 '산업화와 노동'이라는 주제로 연결됩니다.`,
     referencedNodes: [
-      { id: 'demo_9', title: 'React 18 신기능', link: '/nodes/demo_9' },
-      { id: 'demo_10', title: 'Next.js App Router', link: '/nodes/demo_10' },
-      { id: 'demo_11', title: 'TypeScript 타입 시스템', link: '/nodes/demo_11' },
-      { id: 'demo_14', title: '웹 성능 최적화', link: '/nodes/demo_14' },
+      { id: 'demo_9', title: '한강의 채식주의자', link: '/nodes/demo_9' },
+      { id: 'demo_12', title: '조세희의 난장이가 쏘아올린 작은 공', link: '/nodes/demo_12' },
+      { id: 'demo_14', title: '최인훈의 광장', link: '/nodes/demo_14' },
+      { id: 'demo_11', title: '박완서의 나목', link: '/nodes/demo_11' },
     ],
   },
   {
-    question: '생산성을 높이는 방법을 알려줘',
-    answer: `생산성 향상 관련 자료를 종합했습니다.
+    question: '실존주의 문학을 알려줘',
+    answer: `실존주의 관련 문학과 철학 자료입니다.
 
-**핵심 전략 3가지:**
+핵심 작품과 사상:
 
-1. **집중력 관리**
-   - 딥워크 실천으로 깊은 집중 시간 확보
-   - 습관 형성을 통한 루틴 구축
+1. 부조리 철학
+   - 카뮈의 이방인 - 부조리한 세계 속 인간
+   - 태양 때문에 저지른 살인, 무의미한 세계
 
-2. **지식 관리**
-   - 제텔카스텐/코넬 노트 방식의 체계적 정리
-   - 마인드맵으로 아이디어 시각화 및 연결
-   - 스페이스드 반복으로 장기 기억 강화
+2. 실존의 불안
+   - 카프카의 변신 - 실존적 소외의 우화
+   - 사르트르의 실존주의 - 자유와 책임
 
-3. **업무 방식**
-   - 효과적인 회의 운영
-   - OKR로 목표 정렬
+3. 한국 문학의 수용
+   - 최인훈의 광장 - 분단 속 개인의 실존 탐구
 
-글쓰기 루틴과 딥워크 자료가 연결되어 있어, 창작 생산성에 관심 있으시면 함께 참고하세요.`,
+카뮈와 사르트르, 그리고 한국의 최인훈이 실존주의라는 주제로 연결됩니다.`,
     referencedNodes: [
-      { id: 'demo_29', title: '딥워크 실천', link: '/nodes/demo_29' },
-      { id: 'demo_28', title: '효과적인 노트 테이킹', link: '/nodes/demo_28' },
-      { id: 'demo_33', title: '습관 형성', link: '/nodes/demo_33' },
-      { id: 'demo_24', title: '효과적인 회의', link: '/nodes/demo_24' },
+      { id: 'demo_32', title: '알베르 카뮈의 이방인', link: '/nodes/demo_32' },
+      { id: 'demo_28', title: '카프카의 변신', link: '/nodes/demo_28' },
+      { id: 'demo_35', title: '사르트르의 실존주의', link: '/nodes/demo_35' },
+      { id: 'demo_14', title: '최인훈의 광장', link: '/nodes/demo_14' },
     ],
   },
   {
-    question: '데이터 분석 자료를 보여줘',
-    answer: `데이터 분석 관련 자료를 정리했습니다.
+    question: '고전문학 자료를 보여줘',
+    answer: `한국 고전문학 자료를 정리했습니다.
 
-**학습 경로 제안:**
+판소리계 소설:
+- 춘향전: 신분을 초월한 사랑과 절개
+- 심청전: 효녀의 희생과 보은
+- 흥부전: 권선징악과 민중의 꿈
 
-1. **기초**
-   - SQL 쿼리 최적화
-   - Python 데이터 분석 (Pandas, NumPy)
+한글소설의 시작:
+- 홍길동전: 최초의 한글소설, 신분제 저항
+- 구운몽: 불교적 세계관, 인생무상
 
-2. **시각화**
-   - Matplotlib, Seaborn, Plotly 활용법
-   - 대시보드 설계 원칙
+우화소설:
+- 토끼전: 풍자와 해학이 넘치는 이야기
 
-3. **실무 응용**
-   - A/B 테스트 설계와 통계 분석
-   - 데이터 파이프라인 구축
-
-ML 파이프라인과 데이터 파이프라인이 연결되어 있어, MLOps에 관심 있으시면 함께 살펴보세요.`,
+춘향전과 심청전이 '여성 주인공'과 '판소리'로 연결되어 있습니다.`,
     referencedNodes: [
-      { id: 'demo_35', title: 'Python 데이터 분석', link: '/nodes/demo_35' },
-      { id: 'demo_36', title: '데이터 시각화', link: '/nodes/demo_36' },
-      { id: 'demo_37', title: 'A/B 테스트 설계', link: '/nodes/demo_37' },
-      { id: 'demo_39', title: '데이터 파이프라인', link: '/nodes/demo_39' },
+      { id: 'demo_16', title: '춘향전', link: '/nodes/demo_16' },
+      { id: 'demo_19', title: '심청전', link: '/nodes/demo_19' },
+      { id: 'demo_17', title: '홍길동전', link: '/nodes/demo_17' },
+      { id: 'demo_18', title: '구운몽', link: '/nodes/demo_18' },
     ],
   },
   {
-    question: '글쓰기 관련 자료를 찾아줘',
-    answer: `창작 및 글쓰기 관련 자료를 모았습니다.
+    question: '글쓰기에 참고할 자료는?',
+    answer: `창작에 도움이 될 문학 자료를 모았습니다.
 
-**체계적인 글쓰기를 위한 자료:**
+서사 구조 학습:
+- 춘향전의 서사 구조 - 발단, 전개, 위기, 절정, 결말
+- 홍길동전의 영웅 서사 - 비범한 탄생과 모험
 
-1. **구조 설계**
-   - 스토리텔링 구조 (3막 구조, 영웅의 여정)
-   - 세계관 구축 (일관성 있는 설정)
+문체와 기법:
+- 김승옥의 감각적 문체 - 무진기행
+- 버지니아 울프의 의식의 흐름 기법
 
-2. **캐릭터와 대화**
-   - 캐릭터 아크 설계 (성장과 변화)
-   - 대화문 작성법 (자연스러운 목소리)
+캐릭터 연구:
+- 도스토예프스키의 심리 묘사
+- 헤세의 성장 서사
 
-3. **습관과 완성**
-   - 글쓰기 루틴 (꾸준한 습관)
-   - 퇴고와 수정 (완성도 높이기)
-
-스토리텔링 구조와 캐릭터 아크가 강하게 연결되어 있습니다.`,
+다양한 문학 작품들이 서로 영향을 주고받으며 연결되어 있습니다.`,
     referencedNodes: [
-      { id: 'demo_16', title: '스토리텔링 구조', link: '/nodes/demo_16' },
-      { id: 'demo_17', title: '캐릭터 아크 설계', link: '/nodes/demo_17' },
-      { id: 'demo_19', title: '세계관 구축', link: '/nodes/demo_19' },
-      { id: 'demo_20', title: '글쓰기 루틴', link: '/nodes/demo_20' },
+      { id: 'demo_15', title: '김승옥의 무진기행', link: '/nodes/demo_15' },
+      { id: 'demo_31', title: '버지니아 울프의 댈러웨이 부인', link: '/nodes/demo_31' },
+      { id: 'demo_29', title: '도스토예프스키의 죄와 벌', link: '/nodes/demo_29' },
+      { id: 'demo_33', title: '헤르만 헤세의 데미안', link: '/nodes/demo_33' },
     ],
   },
   {
-    question: '팀 협업을 개선하는 방법은?',
-    answer: `팀 협업 개선을 위한 자료를 정리했습니다.
+    question: '신화 이야기를 보여줘',
+    answer: `문학과 연결된 신화/철학적 주제를 정리했습니다.
 
-**효과적인 협업을 위한 핵심 요소:**
+동양 사상:
+- 유불선 사상이 문학에 미친 영향
+- 구운몽의 불교적 세계관
 
-1. **프로세스**
-   - 애자일 스크럼 방법론 도입
-   - OKR로 팀 목표 정렬
+서양 철학:
+- 니체의 초인 사상과 영원회귀
+- 푸코의 권력 이론과 담론 분석
 
-2. **코드 품질**
-   - 건설적인 코드 리뷰 문화
-   - 기술 문서화 습관
+문학과의 연결:
+- 한용운의 님의 침묵 - 불교적 역설
+- 정지용의 향수 - 동양적 자연관
 
-3. **소통**
-   - 효과적인 회의 운영
-   - 체계적인 온보딩 프로세스
-
-애자일과 코드 리뷰가 연결되어 있어, 개발팀이라면 함께 적용해보세요.`,
+동양 사상과 한국 현대시가 깊이 연결되어 있습니다.`,
     referencedNodes: [
-      { id: 'demo_22', title: '애자일 스크럼', link: '/nodes/demo_22' },
-      { id: 'demo_25', title: '코드 리뷰 문화', link: '/nodes/demo_25' },
-      { id: 'demo_24', title: '효과적인 회의', link: '/nodes/demo_24' },
-      { id: 'demo_27', title: '온보딩 프로세스', link: '/nodes/demo_27' },
+      { id: 'demo_37', title: '동양 사상과 문학', link: '/nodes/demo_37' },
+      { id: 'demo_34', title: '니체의 차라투스트라', link: '/nodes/demo_34' },
+      { id: 'demo_18', title: '구운몽', link: '/nodes/demo_18' },
+      { id: 'demo_5', title: '한용운의 님의 침묵', link: '/nodes/demo_5' },
     ],
   },
 ];
@@ -314,83 +307,94 @@ export const demoNodeDetails: Record<string, {
 }> = {
   demo_1: {
     id: 'demo_1',
-    summary: 'GPT-4의 트랜스포머 아키텍처와 어텐션 메커니즘에 대한 분석',
-    text: `GPT-4는 OpenAI에서 개발한 대규모 언어 모델로, 트랜스포머 아키텍처를 기반으로 합니다.
+    summary: '"죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를" - 저항시인의 순수한 영혼',
+    text: `윤동주 (1917-1945) 서시 (序詩)
 
-핵심 구성 요소:
-1. Self-Attention 메커니즘: 입력 시퀀스의 모든 위치 간 관계를 학습
-2. Multi-Head Attention: 여러 관점에서 동시에 어텐션 수행
-3. Feed-Forward Networks: 비선형 변환을 통한 표현력 강화
-4. Layer Normalization: 학습 안정화
+죽는 날까지 하늘을 우러러
+한 점 부끄럼이 없기를,
+잎새에 이는 바람에도
+나는 괴로워했다.
+별을 노래하는 마음으로
+모든 죽어가는 것을 사랑해야지
+그리고 나한테 주어진 길을
+걸어가야겠다.
 
-GPT-4는 이전 버전 대비 더 큰 컨텍스트 윈도우와 향상된 추론 능력을 제공합니다.`,
+오늘 밤에도 별이 바람에 스치운다.
+
+--- 윤동주는 일제강점기 암흑 속에서 순수한 영혼을 지키려 했던 저항시인입니다. 그의 시는 직접적인 저항이 아닌, 자기 성찰과 부끄러움을 통한 윤리적 저항이었습니다.`,
     format: 'article',
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
   },
   demo_2: {
     id: 'demo_2',
-    summary: 'Retrieval-Augmented Generation을 활용한 지식 기반 AI 시스템 구현 방법',
-    text: `RAG(Retrieval-Augmented Generation)는 LLM의 한계를 극복하기 위한 아키텍처입니다.
+    summary: '이별의 정한, 한국인의 보편적 감성을 담은 민요적 서정시',
+    text: `김소월 (1902-1934) 진달래꽃
 
-구현 단계:
-1. 문서 청킹: 긴 문서를 적절한 크기로 분할
-2. 임베딩 생성: 각 청크를 벡터로 변환
-3. 벡터 DB 저장: Pinecone, Weaviate 등에 인덱싱
-4. 검색: 쿼리와 유사한 문서 검색
-5. 생성: 검색된 컨텍스트와 함께 LLM에 전달
+나 보기가 역겨워
+가실 때에는
+말없이 고이 보내 드리우리다
 
-LangChain을 활용하면 RAG 파이프라인을 쉽게 구축할 수 있습니다.`,
+영변에 약산
+진달래꽃
+아름 따다 가실 길에 뿌리우리다
+
+가시는 걸음걸음
+놓인 그 꽃을
+사뿐히 즈려밟고 가시옵소서
+
+나 보기가 역겨워
+가실 때에는
+죽어도 아니 눈물 흘리우리다
+
+--- 김소월은 민요적 율격과 한국인의 보편적 정서인 '한(恨)'을 탁월하게 표현한 시인입니다. 이별의 슬픔을 역설적으로 표현하여 더욱 애절한 감정을 자아냅니다.`,
     format: 'article',
     created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
   },
   demo_9: {
     id: 'demo_9',
-    summary: 'Concurrent Mode, Suspense, Server Components 등 React 18의 주요 변화',
-    text: `React 18은 동시성(Concurrency)을 핵심으로 하는 메이저 업데이트입니다.
+    summary: '폭력적 세계에 대한 거부, 식물이 되고자 하는 여성의 이야기',
+    text: `한강 (1970-) 채식주의자 (2007)
 
-주요 기능:
-1. Automatic Batching: 여러 상태 업데이트를 자동으로 배치 처리
-2. Transitions: 긴급하지 않은 업데이트를 표시하여 UI 응답성 유지
-3. Suspense 개선: 서버 사이드 렌더링에서도 사용 가능
-4. Server Components: 서버에서 렌더링되는 컴포넌트로 번들 크기 감소
+"나는 꿈을 꾸었어요. 숲에서 피투성이가 된 얼굴들을요."
 
-useTransition, useDeferredValue 등 새로운 훅도 추가되었습니다.`,
+영혜는 어느 날 갑자기 고기를 먹지 않겠다고 선언한다. 단순한 식습관의 변화가 아니라, 폭력적인 세계에 대한 거부이자 인간이기를 그만두려는 시도였다.
+
+세 부분으로 구성된 이 소설은 각각 '채식주의자', '몽고반점', '나무 불꽃'이라는 제목으로 영혜의 변화를 다른 시선에서 조명한다.
+
+--- 2016년 맨부커 인터내셔널상 수상작. 한강은 인간 내면의 폭력성과 그것으로부터의 탈출을 섬세하게 그려냈습니다.`,
     format: 'article',
     created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
   },
   demo_16: {
     id: 'demo_16',
-    summary: '3막 구조, 영웅의 여정 등 이야기 전개의 기본 프레임워크',
-    text: `효과적인 스토리텔링을 위한 구조적 접근법입니다.
+    summary: '신분을 초월한 사랑과 절개, 한국 고전소설의 대표작',
+    text: `춘향전 (春香傳)
 
-3막 구조:
-- 1막 (설정): 인물, 배경, 갈등 소개
-- 2막 (대립): 갈등 심화, 위기와 시련
-- 3막 (해결): 클라이맥스와 결말
+양반 자제 이몽룡과 퇴기의 딸 춘향의 신분을 초월한 사랑 이야기.
 
-영웅의 여정 (조셉 캠벨):
-1. 일상 세계 → 2. 모험의 소명 → 3. 소명의 거부
-4. 조력자와의 만남 → 5. 첫 관문 통과 → 6. 시련, 동료, 적
-7. 동굴 가장 깊은 곳 접근 → 8. 시련 → 9. 보상
-10. 귀환의 길 → 11. 부활 → 12. 영약을 가지고 귀환`,
+주요 장면:
+1. 광한루에서의 만남 - 이몽룡이 그네 타는 춘향을 보고 반함
+2. 백년가약 - 춘향의 집에서 사랑을 맹세
+3. 이별 - 이몽룡이 한양으로 떠남
+4. 변학도의 수청 강요 - 춘향의 절개
+5. 어사출도 - 암행어사가 된 이몽룡의 귀환
+
+--- 판소리로도 전해지는 춘향전은 신분제에 대한 저항, 여성의 절개, 정의의 실현이라는 주제를 담고 있습니다.`,
     format: 'memo',
     created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
   },
   demo_29: {
     id: 'demo_29',
-    summary: '깊은 집중을 통한 생산성 향상 전략',
-    text: `칼 뉴포트의 딥워크 개념을 실천하기 위한 전략입니다.
+    summary: '살인자의 내면 탐구, 죄의식과 구원에 대한 심리소설',
+    text: `표도르 도스토예프스키 (1821-1881) 죄와 벌 (1866)
 
-핵심 원칙:
-1. 깊이 있게 일하라: 인지적으로 까다로운 작업에 방해 없이 집중
-2. 지루함을 받아들여라: 항상 자극을 추구하는 습관을 버려라
-3. 소셜 미디어를 끊어라: 산만함의 주요 원인 제거
-4. 피상적 작업을 줄여라: 회의, 이메일 등 비핵심 작업 최소화
+"범죄는 일종의 병이다. 그것은 결단코 논쟁의 여지가 없다."
 
-실천 방법:
-- 시간 블로킹: 딥워크 시간을 미리 예약
-- 의식(ritual): 작업 시작/종료 루틴 만들기
-- 다운타임 확보: 휴식이 창의성과 집중력을 회복`,
+가난한 대학생 라스콜니코프는 '비범한 인간'이라는 이론에 빠져 전당포 노파를 살해한다. 그러나 살인 후 그를 기다리는 것은 영웅적 성취가 아닌 끝없는 죄의식과 고통이다.
+
+소냐라는 순수한 영혼과의 만남을 통해 그는 결국 자수하고, 시베리아 유형지에서 구원의 가능성을 발견한다.
+
+--- 도스토예프스키는 인간 내면의 깊은 곳에 도사린 선과 악의 대립을 탁월하게 그려낸 심리소설의 대가입니다.`,
     format: 'article',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
