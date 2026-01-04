@@ -110,7 +110,9 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
                   onClick={() =>
                     handleNodeLinkClick(refNode || { id: nodeId, title: nodeId, link: `/nodes/${nodeId}` })
                   }
-                  className="inline-flex items-center gap-1 text-nova-600 hover:text-nova-700 underline"
+                  className={`inline-flex items-center gap-1 underline ${
+                    isDemoMode ? 'text-violet-400 hover:text-violet-300' : 'text-nova-600 hover:text-nova-700'
+                  }`}
                 >
                   {refNode?.title || nodeId}
                   <ExternalLink className="w-3 h-3" />
@@ -123,14 +125,18 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
 
         {/* 참조 노드 목록 */}
         {message.referenced_nodes && message.referenced_nodes.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <p className="text-xs text-gray-500 mb-2">참조된 노드:</p>
+          <div className={`mt-3 pt-3 ${isDemoMode ? 'border-t border-white/10' : 'border-t border-gray-100'}`}>
+            <p className={`text-xs mb-2 ${isDemoMode ? 'text-white/50' : 'text-gray-500'}`}>참조된 노드:</p>
             <div className="flex flex-wrap gap-2">
               {message.referenced_nodes.map((node) => (
                 <button
                   key={node.id}
                   onClick={() => handleNodeLinkClick(node)}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs text-gray-700 transition-colors"
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                    isDemoMode
+                      ? 'bg-white/10 hover:bg-white/20 text-white/80'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
                 >
                   {node.title.length > 30 ? `${node.title.slice(0, 30)}...` : node.title}
                   <ExternalLink className="w-3 h-3" />
@@ -144,16 +150,18 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className={`flex flex-col h-full ${isDemoMode ? 'bg-slate-900' : 'bg-white'}`}>
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isDemoMode ? 'dark-scrollbar' : ''}`}>
         {chatMessages.length === 0 && isDemoMode && (
           <div className="text-center py-6">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Sparkles className="w-5 h-5 text-nova-500" />
-              <span className="text-sm font-medium text-gray-700">데모 모드</span>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
             </div>
-            <p className="text-sm text-gray-500 mb-6">
+            <h3 className="text-lg font-semibold text-white mb-2">AI 에이전트</h3>
+            <p className="text-sm text-white/60 mb-6">
               아래 버튼을 클릭해서 AI 에이전트를 체험해보세요!
             </p>
             <div className="space-y-2">
@@ -161,7 +169,7 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
                 <button
                   key={index}
                   onClick={() => handleDemoQuestion(index)}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-nova-50 to-purple-50 hover:from-nova-100 hover:to-purple-100 border border-nova-200 rounded-xl text-left text-sm text-gray-700 transition-all hover:shadow-md"
+                  className="w-full px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-violet-500/50 rounded-xl text-left text-sm text-white/80 transition-all hover:shadow-lg hover:shadow-violet-500/10"
                 >
                   <span className="font-medium">{conv.question}</span>
                 </button>
@@ -187,20 +195,22 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                message.role === 'user' ? 'bg-nova-100' : 'bg-gray-100'
+                message.role === 'user'
+                  ? isDemoMode ? 'bg-violet-500/20' : 'bg-nova-100'
+                  : isDemoMode ? 'bg-white/10' : 'bg-gray-100'
               }`}
             >
               {message.role === 'user' ? (
-                <User className="w-4 h-4 text-nova-600" />
+                <User className={`w-4 h-4 ${isDemoMode ? 'text-violet-400' : 'text-nova-600'}`} />
               ) : (
-                <Bot className="w-4 h-4 text-gray-600" />
+                <Bot className={`w-4 h-4 ${isDemoMode ? 'text-white/70' : 'text-gray-600'}`} />
               )}
             </div>
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 message.role === 'user'
-                  ? 'bg-nova-600 text-white'
-                  : 'bg-gray-100 text-gray-900'
+                  ? isDemoMode ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white' : 'bg-nova-600 text-white'
+                  : isDemoMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-900'
               }`}
             >
               {message.role === 'user' ? (
@@ -214,19 +224,19 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
 
         {(mutation.isPending || isTyping) && (
           <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-gray-600" />
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDemoMode ? 'bg-white/10' : 'bg-gray-100'}`}>
+              <Bot className={`w-4 h-4 ${isDemoMode ? 'text-white/70' : 'text-gray-600'}`} />
             </div>
-            <div className="bg-gray-100 rounded-2xl px-4 py-3">
-              <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+            <div className={`rounded-2xl px-4 py-3 ${isDemoMode ? 'bg-white/10' : 'bg-gray-100'}`}>
+              <Loader2 className={`w-5 h-5 animate-spin ${isDemoMode ? 'text-violet-400' : 'text-gray-400'}`} />
             </div>
           </div>
         )}
 
         {/* 데모 모드: 대화 후 추가 질문 버튼 */}
         {isDemoMode && chatMessages.length > 0 && availableDemoQuestions.length > 0 && !isTyping && (
-          <div className="pt-4 border-t border-gray-100">
-            <p className="text-xs text-gray-400 mb-3 text-center">더 궁금한 게 있으신가요?</p>
+          <div className="pt-4 border-t border-white/10">
+            <p className="text-xs text-white/40 mb-3 text-center">더 궁금한 게 있으신가요?</p>
             <div className="space-y-2">
               {availableDemoQuestions.slice(0, 3).map((conv, _) => {
                 const originalIndex = demoConversations.findIndex(d => d.question === conv.question);
@@ -234,7 +244,7 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
                   <button
                     key={originalIndex}
                     onClick={() => handleDemoQuestion(originalIndex)}
-                    className="w-full px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-left text-sm text-gray-600 transition-colors"
+                    className="w-full px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-violet-500/30 rounded-lg text-left text-sm text-white/70 transition-colors"
                   >
                     {conv.question}
                   </button>
@@ -272,10 +282,10 @@ export default function AgentChat({ onNodeClick }: AgentChatProps) {
 
       {/* 데모 모드 안내 */}
       {isDemoMode && (
-        <div className="p-3 border-t border-gray-100 bg-gradient-to-r from-nova-50 to-purple-50">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-            <Sparkles className="w-3 h-3 text-nova-500" />
-            <span>데모 모드에서는 미리 준비된 질문으로 체험할 수 있습니다</span>
+        <div className="p-3 border-t border-white/10 bg-gradient-to-r from-violet-500/10 to-indigo-500/10">
+          <div className="flex items-center justify-center gap-2 text-xs text-white/50">
+            <Sparkles className="w-3 h-3 text-violet-400" />
+            <span>60개의 문학 자료를 AI로 분석한 결과를 체험해보세요</span>
           </div>
         </div>
       )}
