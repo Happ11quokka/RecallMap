@@ -2,23 +2,23 @@ import type { GraphData, ReferencedNode } from '@/types';
 
 // 클러스터 ID 매핑 (노드별 클러스터 지정)
 export const nodeClusterMap: Record<string, number> = {
-  // 클러스터 0: 한국 현대시 (8개)
-  demo_1: 0, demo_2: 0, demo_3: 0, demo_4: 0, demo_5: 0, demo_6: 0, demo_7: 0, demo_8: 0,
-  // 클러스터 1: 한국 현대소설 (7개)
-  demo_9: 1, demo_10: 1, demo_11: 1, demo_12: 1, demo_13: 1, demo_14: 1, demo_15: 1,
-  // 클러스터 2: 고전문학 (6개)
-  demo_16: 2, demo_17: 2, demo_18: 2, demo_19: 2, demo_20: 2, demo_21: 2,
-  // 클러스터 3: 문학비평/이론 (6개)
-  demo_22: 3, demo_23: 3, demo_24: 3, demo_25: 3, demo_26: 3, demo_27: 3,
-  // 클러스터 4: 세계문학 (6개)
-  demo_28: 4, demo_29: 4, demo_30: 4, demo_31: 4, demo_32: 4, demo_33: 4,
-  // 클러스터 5: 인문학/철학 (7개)
-  demo_34: 5, demo_35: 5, demo_36: 5, demo_37: 5, demo_38: 5, demo_39: 5, demo_40: 5,
+  // 클러스터 0: 한국 현대시 (10개)
+  demo_1: 0, demo_2: 0, demo_3: 0, demo_4: 0, demo_5: 0, demo_6: 0, demo_7: 0, demo_8: 0, demo_41: 0, demo_42: 0,
+  // 클러스터 1: 한국 현대소설 (10개)
+  demo_9: 1, demo_10: 1, demo_11: 1, demo_12: 1, demo_13: 1, demo_14: 1, demo_15: 1, demo_43: 1, demo_44: 1, demo_45: 1,
+  // 클러스터 2: 고전문학 (10개)
+  demo_16: 2, demo_17: 2, demo_18: 2, demo_19: 2, demo_20: 2, demo_21: 2, demo_46: 2, demo_47: 2, demo_48: 2, demo_49: 2,
+  // 클러스터 3: 문학비평/이론 (10개)
+  demo_22: 3, demo_23: 3, demo_24: 3, demo_25: 3, demo_26: 3, demo_27: 3, demo_50: 3, demo_51: 3, demo_52: 3, demo_53: 3,
+  // 클러스터 4: 세계문학 (10개)
+  demo_28: 4, demo_29: 4, demo_30: 4, demo_31: 4, demo_32: 4, demo_33: 4, demo_54: 4, demo_55: 4, demo_56: 4, demo_57: 4,
+  // 클러스터 5: 인문학/철학 (10개)
+  demo_34: 5, demo_35: 5, demo_36: 5, demo_37: 5, demo_38: 5, demo_39: 5, demo_40: 5, demo_58: 5, demo_59: 5, demo_60: 5,
 };
 
-// 데모용 40개 노드 데이터 - 인문학/한국 현대문학 테마
+// 데모용 60개 노드 데이터 - 인문학/한국 현대문학 테마
 export const demoNodes = [
-  // 클러스터 0: 한국 현대시 (8개)
+  // 클러스터 0: 한국 현대시 (10개)
   { id: 'demo_1', label: '윤동주의 서시', summary: '"죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를" - 저항시인의 순수한 영혼', keywords: ['윤동주', '서시', '저항시', '순수'], project: 'literature' },
   { id: 'demo_2', label: '김소월의 진달래꽃', summary: '이별의 정한, 한국인의 보편적 감성을 담은 민요적 서정시', keywords: ['김소월', '진달래꽃', '민요시', '이별'], project: 'literature' },
   { id: 'demo_3', label: '정지용의 향수', summary: '선명한 이미지와 음악적 리듬으로 그린 고향에 대한 그리움', keywords: ['정지용', '향수', '이미지즘', '고향'], project: 'literature' },
@@ -27,8 +27,10 @@ export const demoNodes = [
   { id: 'demo_6', label: '서정주의 국화 옆에서', summary: '동양적 명상과 삶의 원숙함을 노래한 서정시', keywords: ['서정주', '국화', '서정', '명상'], project: 'literature' },
   { id: 'demo_7', label: '이육사의 광야', summary: '일제강점기 암흑 속에서 빛나는 저항정신과 희망의 노래', keywords: ['이육사', '광야', '저항시', '희망'], project: 'literature' },
   { id: 'demo_8', label: '김수영의 풀', summary: '4.19 이후 민주주의를 향한 열망과 생명력을 담은 참여시', keywords: ['김수영', '풀', '참여시', '민주주의'], project: 'literature' },
+  { id: 'demo_41', label: '신동엽의 껍데기는 가라', summary: '4.19 혁명 정신을 노래한 민중시인의 대표작', keywords: ['신동엽', '민중시', '혁명', '저항'], project: 'literature' },
+  { id: 'demo_42', label: '기형도의 빈집', summary: '죽음과 부재의 시학, 1980년대 암울한 시대 정서', keywords: ['기형도', '빈집', '죽음', '부재'], project: 'literature' },
 
-  // 클러스터 1: 한국 현대소설 (7개)
+  // 클러스터 1: 한국 현대소설 (10개)
   { id: 'demo_9', label: '한강의 채식주의자', summary: '폭력적 세계에 대한 거부, 식물이 되고자 하는 여성의 이야기', keywords: ['한강', '채식주의자', '맨부커상', '폭력'], project: 'literature' },
   { id: 'demo_10', label: '황석영의 객지', summary: '산업화 시대 노동자의 삶과 소외를 그린 리얼리즘 소설', keywords: ['황석영', '객지', '노동문학', '리얼리즘'], project: 'literature' },
   { id: 'demo_11', label: '박완서의 나목', summary: '6.25 전쟁의 상처와 생존, 예술가의 삶을 그린 자전적 소설', keywords: ['박완서', '나목', '전쟁', '여성'], project: 'literature' },
@@ -36,32 +38,47 @@ export const demoNodes = [
   { id: 'demo_13', label: '이청준의 당신들의 천국', summary: '소록도를 배경으로 한 권력과 이상사회에 대한 우화', keywords: ['이청준', '당신들의천국', '권력', '우화'], project: 'literature' },
   { id: 'demo_14', label: '최인훈의 광장', summary: '분단 현실 속 이데올로기의 허상과 개인의 실존을 탐구', keywords: ['최인훈', '광장', '분단', '실존'], project: 'literature' },
   { id: 'demo_15', label: '김승옥의 무진기행', summary: '현대인의 고독과 일상으로부터의 탈출을 그린 감각적 소설', keywords: ['김승옥', '무진기행', '고독', '감각'], project: 'literature' },
+  { id: 'demo_43', label: '이문열의 우리들의 일그러진 영웅', summary: '권력의 본질과 순응의 문제를 다룬 알레고리 소설', keywords: ['이문열', '권력', '알레고리', '교실'], project: 'literature' },
+  { id: 'demo_44', label: '신경숙의 엄마를 부탁해', summary: '잃어버린 어머니를 통해 가족의 의미를 성찰하는 이야기', keywords: ['신경숙', '어머니', '가족', '상실'], project: 'literature' },
+  { id: 'demo_45', label: '정유정의 종의 기원', summary: '괴물은 태어나는가 만들어지는가, 심리 스릴러의 걸작', keywords: ['정유정', '스릴러', '심리', '괴물'], project: 'literature' },
 
-  // 클러스터 2: 고전문학 (6개)
+  // 클러스터 2: 고전문학 (10개)
   { id: 'demo_16', label: '춘향전', summary: '신분을 초월한 사랑과 절개, 한국 고전소설의 대표작', keywords: ['춘향전', '판소리', '사랑', '절개'], project: 'literature' },
   { id: 'demo_17', label: '홍길동전', summary: '허균이 쓴 최초의 한글소설, 신분제에 대한 저항', keywords: ['홍길동전', '허균', '신분제', '이상사회'], project: 'literature' },
   { id: 'demo_18', label: '구운몽', summary: '불교적 세계관을 바탕으로 한 인생무상과 깨달음의 서사', keywords: ['구운몽', '김만중', '불교', '꿈'], project: 'literature' },
   { id: 'demo_19', label: '심청전', summary: '효녀 심청의 희생과 보은, 한국적 효 사상의 결정체', keywords: ['심청전', '효', '판소리', '희생'], project: 'literature' },
   { id: 'demo_20', label: '흥부전', summary: '형제간의 우애와 권선징악, 민중의 꿈을 담은 이야기', keywords: ['흥부전', '판소리', '권선징악', '민중'], project: 'literature' },
   { id: 'demo_21', label: '토끼전', summary: '용궁에 간 토끼의 지략, 풍자와 해학이 넘치는 우화소설', keywords: ['토끼전', '우화', '풍자', '해학'], project: 'literature' },
+  { id: 'demo_46', label: '사씨남정기', summary: '가문 내 갈등과 여성의 고난을 그린 가정소설', keywords: ['사씨남정기', '김만중', '가정소설', '여성'], project: 'literature' },
+  { id: 'demo_47', label: '금오신화', summary: '김시습의 환상적 단편집, 한국 최초의 소설로 평가', keywords: ['금오신화', '김시습', '환상', '단편'], project: 'literature' },
+  { id: 'demo_48', label: '박씨전', summary: '병자호란을 배경으로 한 영웅적 여성 이야기', keywords: ['박씨전', '병자호란', '여성영웅', '역사'], project: 'literature' },
+  { id: 'demo_49', label: '숙향전', summary: '천상에서 적강한 여인의 고난과 재회 이야기', keywords: ['숙향전', '적강', '고난', '사랑'], project: 'literature' },
 
-  // 클러스터 3: 문학비평/이론 (6개)
+  // 클러스터 3: 문학비평/이론 (10개)
   { id: 'demo_22', label: '김현의 문학사회학', summary: '문학과 사회의 관계를 탐구한 비평적 시각', keywords: ['김현', '문학사회학', '비평', '사회'], project: 'theory' },
   { id: 'demo_23', label: '백낙청의 민족문학론', summary: '분단시대의 문학적 과제와 민족문학의 방향 제시', keywords: ['백낙청', '민족문학', '분단', '리얼리즘'], project: 'theory' },
   { id: 'demo_24', label: '서정시의 이론', summary: '서정시의 본질과 형식, 언어적 특성에 대한 연구', keywords: ['서정시', '시학', '언어', '형식'], project: 'theory' },
   { id: 'demo_25', label: '한국 근대소설의 형성', summary: '개화기부터 일제강점기까지 한국 소설의 발전 과정', keywords: ['근대소설', '개화기', '형성', '발전'], project: 'theory' },
   { id: 'demo_26', label: '문학과 이데올로기', summary: '문학 텍스트 속에 작동하는 이데올로기적 무의식 분석', keywords: ['이데올로기', '무의식', '텍스트', '분석'], project: 'theory' },
   { id: 'demo_27', label: '탈식민주의 문학비평', summary: '식민지 경험과 문학, 그리고 탈식민적 주체성 탐구', keywords: ['탈식민주의', '식민지', '주체성', '비평'], project: 'theory' },
+  { id: 'demo_50', label: '여성주의 문학비평', summary: '젠더 관점에서 문학 텍스트를 재해석하는 비평 이론', keywords: ['페미니즘', '젠더', '여성', '비평'], project: 'theory' },
+  { id: 'demo_51', label: '서사학 입문', summary: '이야기의 구조와 서술 방식에 대한 체계적 연구', keywords: ['서사학', '내러티브', '구조', '서술'], project: 'theory' },
+  { id: 'demo_52', label: '독자반응비평', summary: '텍스트와 독자의 상호작용에 주목하는 비평 방법론', keywords: ['독자반응', '수용미학', '독서', '해석'], project: 'theory' },
+  { id: 'demo_53', label: '생태비평', summary: '문학과 환경의 관계를 탐구하는 새로운 비평 패러다임', keywords: ['생태비평', '환경', '자연', '생태학'], project: 'theory' },
 
-  // 클러스터 4: 세계문학 (6개)
+  // 클러스터 4: 세계문학 (10개)
   { id: 'demo_28', label: '카프카의 변신', summary: '어느 날 벌레로 변해버린 남자, 실존적 소외의 우화', keywords: ['카프카', '변신', '실존', '소외'], project: 'literature' },
   { id: 'demo_29', label: '도스토예프스키의 죄와 벌', summary: '살인자의 내면 탐구, 죄의식과 구원에 대한 심리소설', keywords: ['도스토예프스키', '죄와벌', '심리', '구원'], project: 'literature' },
   { id: 'demo_30', label: '가브리엘 마르케스의 백년의 고독', summary: '부엔디아 가문의 100년, 마술적 리얼리즘의 정점', keywords: ['마르케스', '백년의고독', '마술적리얼리즘', '라틴아메리카'], project: 'literature' },
   { id: 'demo_31', label: '버지니아 울프의 댈러웨이 부인', summary: '의식의 흐름 기법으로 그린 하루, 삶과 죽음의 명상', keywords: ['버지니아울프', '의식의흐름', '모더니즘', '여성'], project: 'literature' },
   { id: 'demo_32', label: '알베르 카뮈의 이방인', summary: '태양 때문에 저지른 살인, 부조리한 세계 속 인간', keywords: ['카뮈', '이방인', '부조리', '실존주의'], project: 'literature' },
   { id: 'demo_33', label: '헤르만 헤세의 데미안', summary: '자아를 찾아가는 싱클레어의 성장, 내면의 세계 탐구', keywords: ['헤세', '데미안', '성장', '자아'], project: 'literature' },
+  { id: 'demo_54', label: '제임스 조이스의 율리시스', summary: '더블린의 하루를 그린 모더니즘 문학의 기념비적 작품', keywords: ['조이스', '율리시스', '모더니즘', '더블린'], project: 'literature' },
+  { id: 'demo_55', label: '프루스트의 잃어버린 시간을 찾아서', summary: '기억과 시간에 대한 방대한 성찰, 프랑스 문학의 정수', keywords: ['프루스트', '시간', '기억', '프랑스'], project: 'literature' },
+  { id: 'demo_56', label: '톨스토이의 안나 카레니나', summary: '불륜과 사회의 위선, 러시아 귀족 사회의 비극', keywords: ['톨스토이', '안나카레니나', '러시아', '비극'], project: 'literature' },
+  { id: 'demo_57', label: '무라카미 하루키의 노르웨이의 숲', summary: '상실과 사랑, 현대 일본의 청춘 이야기', keywords: ['무라카미', '상실', '청춘', '일본'], project: 'literature' },
 
-  // 클러스터 5: 인문학/철학 (7개)
+  // 클러스터 5: 인문학/철학 (10개)
   { id: 'demo_34', label: '니체의 차라투스트라', summary: '신은 죽었다 선언 이후, 초인과 영원회귀의 철학', keywords: ['니체', '차라투스트라', '초인', '영원회귀'], project: 'philosophy' },
   { id: 'demo_35', label: '사르트르의 실존주의', summary: '실존은 본질에 앞선다, 자유와 책임의 철학', keywords: ['사르트르', '실존주의', '자유', '책임'], project: 'philosophy' },
   { id: 'demo_36', label: '푸코의 권력 이론', summary: '규율권력과 생명권력, 근대 사회의 지식-권력 분석', keywords: ['푸코', '권력', '규율', '담론'], project: 'philosophy' },
@@ -69,61 +86,87 @@ export const demoNodes = [
   { id: 'demo_38', label: '해석학과 문학', summary: '텍스트 이해의 방법론, 가다머와 리쾨르의 해석 이론', keywords: ['해석학', '가다머', '리쾨르', '텍스트'], project: 'philosophy' },
   { id: 'demo_39', label: '미학의 기초', summary: '예술과 아름다움의 본질, 미적 경험에 대한 탐구', keywords: ['미학', '예술', '아름다움', '경험'], project: 'philosophy' },
   { id: 'demo_40', label: '한국 철학사', summary: '조선 성리학에서 현대 철학까지 한국 사상의 흐름', keywords: ['한국철학', '성리학', '실학', '현대'], project: 'philosophy' },
+  { id: 'demo_58', label: '하이데거의 존재와 시간', summary: '존재의 의미를 묻는 현상학적 분석, 현대 철학의 이정표', keywords: ['하이데거', '존재', '시간', '현상학'], project: 'philosophy' },
+  { id: 'demo_59', label: '들뢰즈의 차이와 반복', summary: '동일성 철학을 넘어서는 차이의 존재론', keywords: ['들뢰즈', '차이', '반복', '존재론'], project: 'philosophy' },
+  { id: 'demo_60', label: '데리다의 해체주의', summary: '텍스트의 의미 불확정성과 로고스중심주의 비판', keywords: ['데리다', '해체', '텍스트', '차연'], project: 'philosophy' },
 ];
 
 // 엣지 데이터 - 이미지처럼 네트워크 느낌의 많은 연결
 export const demoEdges = [
-  // 클러스터 내부 연결 (같은 색 노드끼리)
-  // AI/ML 내부
+  // 클러스터 0: 한국 현대시 내부 연결
   { source: 'demo_1', target: 'demo_2', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_2', target: 'demo_4', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_3', target: 'demo_5', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_4', target: 'demo_6', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_5', target: 'demo_7', weight: 0.6, edge_type: 'vector' as const },
   { source: 'demo_6', target: 'demo_8', weight: 0.7, edge_type: 'vector' as const },
-  { source: 'demo_1', target: 'demo_4', weight: 0.5, edge_type: 'vector' as const },
-  { source: 'demo_3', target: 'demo_7', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_1', target: 'demo_7', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_3', target: 'demo_41', weight: 0.65, edge_type: 'vector' as const },
+  { source: 'demo_8', target: 'demo_41', weight: 0.75, edge_type: 'vector' as const },
+  { source: 'demo_41', target: 'demo_42', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_42', target: 'demo_1', weight: 0.5, edge_type: 'vector' as const },
 
-  // 웹개발 내부
+  // 클러스터 1: 한국 현대소설 내부 연결
   { source: 'demo_9', target: 'demo_10', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_10', target: 'demo_11', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_11', target: 'demo_12', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_12', target: 'demo_14', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_13', target: 'demo_15', weight: 0.6, edge_type: 'vector' as const },
-  { source: 'demo_9', target: 'demo_14', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_9', target: 'demo_44', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_43', target: 'demo_13', weight: 0.7, edge_type: 'vector' as const },
+  { source: 'demo_44', target: 'demo_11', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_45', target: 'demo_15', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_43', target: 'demo_45', weight: 0.55, edge_type: 'vector' as const },
 
-  // 창작 내부
+  // 클러스터 2: 고전문학 내부 연결
   { source: 'demo_16', target: 'demo_17', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_17', target: 'demo_18', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_18', target: 'demo_19', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_19', target: 'demo_20', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_20', target: 'demo_21', weight: 0.7, edge_type: 'vector' as const },
-  { source: 'demo_16', target: 'demo_19', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_16', target: 'demo_46', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_46', target: 'demo_18', weight: 0.65, edge_type: 'vector' as const },
+  { source: 'demo_47', target: 'demo_48', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_48', target: 'demo_49', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_49', target: 'demo_16', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_47', target: 'demo_17', weight: 0.6, edge_type: 'vector' as const },
 
-  // 비즈니스 내부
+  // 클러스터 3: 문학비평/이론 내부 연결
   { source: 'demo_22', target: 'demo_23', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_23', target: 'demo_24', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_24', target: 'demo_25', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_25', target: 'demo_26', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_26', target: 'demo_27', weight: 0.7, edge_type: 'vector' as const },
-  { source: 'demo_22', target: 'demo_25', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_50', target: 'demo_27', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_51', target: 'demo_24', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_52', target: 'demo_51', weight: 0.65, edge_type: 'vector' as const },
+  { source: 'demo_53', target: 'demo_50', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_22', target: 'demo_52', weight: 0.55, edge_type: 'vector' as const },
 
-  // 학습 내부
+  // 클러스터 4: 세계문학 내부 연결
   { source: 'demo_28', target: 'demo_29', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_29', target: 'demo_30', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_30', target: 'demo_31', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_31', target: 'demo_32', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_32', target: 'demo_33', weight: 0.7, edge_type: 'vector' as const },
-  { source: 'demo_28', target: 'demo_31', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_54', target: 'demo_31', weight: 0.65, edge_type: 'vector' as const },
+  { source: 'demo_55', target: 'demo_54', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_56', target: 'demo_29', weight: 0.7, edge_type: 'vector' as const },
+  { source: 'demo_57', target: 'demo_33', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_55', target: 'demo_30', weight: 0.5, edge_type: 'vector' as const },
 
-  // 데이터 내부
+  // 클러스터 5: 인문학/철학 내부 연결
   { source: 'demo_34', target: 'demo_35', weight: 0.8, edge_type: 'vector' as const },
   { source: 'demo_35', target: 'demo_36', weight: 0.75, edge_type: 'vector' as const },
   { source: 'demo_36', target: 'demo_37', weight: 0.7, edge_type: 'vector' as const },
   { source: 'demo_37', target: 'demo_38', weight: 0.65, edge_type: 'vector' as const },
   { source: 'demo_38', target: 'demo_39', weight: 0.6, edge_type: 'vector' as const },
   { source: 'demo_39', target: 'demo_40', weight: 0.7, edge_type: 'vector' as const },
-  { source: 'demo_34', target: 'demo_37', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_58', target: 'demo_34', weight: 0.65, edge_type: 'vector' as const },
+  { source: 'demo_59', target: 'demo_58', weight: 0.6, edge_type: 'vector' as const },
+  { source: 'demo_60', target: 'demo_59', weight: 0.55, edge_type: 'vector' as const },
+  { source: 'demo_60', target: 'demo_38', weight: 0.5, edge_type: 'vector' as const },
+  { source: 'demo_58', target: 'demo_35', weight: 0.55, edge_type: 'vector' as const },
 
   // 클러스터 간 연결 (약한 연결)
   { source: 'demo_5', target: 'demo_40', weight: 0.4, edge_type: 'vector' as const },
@@ -136,6 +179,18 @@ export const demoEdges = [
   { source: 'demo_10', target: 'demo_25', weight: 0.35, edge_type: 'vector' as const },
   { source: 'demo_2', target: 'demo_10', weight: 0.3, edge_type: 'vector' as const },
   { source: 'demo_37', target: 'demo_30', weight: 0.35, edge_type: 'vector' as const },
+  // 추가 클러스터 간 연결
+  { source: 'demo_41', target: 'demo_23', weight: 0.35, edge_type: 'vector' as const },
+  { source: 'demo_42', target: 'demo_32', weight: 0.3, edge_type: 'vector' as const },
+  { source: 'demo_43', target: 'demo_26', weight: 0.35, edge_type: 'vector' as const },
+  { source: 'demo_44', target: 'demo_50', weight: 0.3, edge_type: 'vector' as const },
+  { source: 'demo_47', target: 'demo_37', weight: 0.35, edge_type: 'vector' as const },
+  { source: 'demo_48', target: 'demo_11', weight: 0.3, edge_type: 'vector' as const },
+  { source: 'demo_51', target: 'demo_54', weight: 0.35, edge_type: 'vector' as const },
+  { source: 'demo_53', target: 'demo_57', weight: 0.3, edge_type: 'vector' as const },
+  { source: 'demo_58', target: 'demo_32', weight: 0.4, edge_type: 'vector' as const },
+  { source: 'demo_59', target: 'demo_27', weight: 0.35, edge_type: 'vector' as const },
+  { source: 'demo_60', target: 'demo_52', weight: 0.4, edge_type: 'vector' as const },
 ];
 
 // GraphData 형식으로 변환
