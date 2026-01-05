@@ -380,60 +380,60 @@ export default function Landing() {
       {/* Content Container */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center pt-16 px-4 sm:px-6 lg:px-8">
+        <section className="flex items-center justify-center pt-20 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto w-full">
             <div className="text-center max-w-4xl mx-auto">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 text-violet-300 rounded-full text-sm font-medium mb-8">
-                <Sparkles className="w-4 h-4" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-violet-300 rounded-full text-xs font-medium mb-4">
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>AI 기반 지식 관리 플랫폼</span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-3">
                 아이디어를 연결하고,
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">맥락을 기억하는</span> AI
               </h1>
 
               {/* Subheadline */}
-              <p className="text-lg sm:text-xl text-white/70 mb-10 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg text-white/70 mb-6 max-w-2xl mx-auto">
                 흩어진 자료와 아이디어를 네트워크로 연결하고, AI가 맥락을 이해하여 필요한 정보를 정확하게 찾아드립니다.
               </p>
 
               {/* CTA Button */}
-              <div className="flex justify-center mb-12">
+              <div className="flex justify-center mb-6">
                 <button
                   onClick={handleDemoLogin}
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2"
                 >
                   데모 체험하기
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Social Proof */}
-              <div className="flex flex-col items-center gap-3">
+              <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center -space-x-2">
                   {['김', '이', '박', '최', '정'].map((name, i) => (
                     <div
                       key={i}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 border-2 border-slate-900 flex items-center justify-center text-white text-xs font-medium"
+                      className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 border-2 border-slate-900 flex items-center justify-center text-white text-xs font-medium"
                     >
                       {name}
                     </div>
                   ))}
                 </div>
-                <p className="text-sm text-white/50">
+                <p className="text-xs text-white/50">
                   <span className="font-semibold text-white/80">10+</span> 명의 사용자가 NOVA와 함께합니다
                 </p>
               </div>
             </div>
 
             {/* Hero Image */}
-            <div className="mt-16 relative max-w-5xl mx-auto">
-              <div className="absolute -inset-4 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 blur-3xl rounded-3xl" />
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <div className="mt-8 relative max-w-4xl mx-auto">
+              <div className="absolute -inset-2 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 blur-2xl rounded-2xl" />
+              <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10">
                 <img
                   src="/screenshot-history.png"
                   alt="NOVA 메인 화면"
