@@ -1,52 +1,109 @@
-import { useNavigate } from 'react-router-dom';
-import { Star, Loader2, CheckCircle, Menu, X, ChevronRight, Sparkles, Network, Search, History, Zap, Shield, Globe } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import { useAppStore } from '@/store/useAppStore';
-import { saveNewsletterEmail } from '@/lib/supabase';
+import { useNavigate } from "react-router-dom";
+import {
+  Star,
+  Loader2,
+  CheckCircle,
+  Menu,
+  X,
+  ChevronRight,
+  Sparkles,
+  Network,
+  Search,
+  History,
+  Zap,
+  Shield,
+  Globe,
+} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import * as THREE from "three";
+import { useAppStore } from "@/store/useAppStore";
+import { saveNewsletterEmail } from "@/lib/supabase";
 
 // 리뷰 데이터 - 다양한 분류의 작가들
 const reviews = [
-  { id: 1, name: 'Kim S.', role: '소설가', rating: 5, review: '장편 소설 집필 시 참고자료 관리가 정말 편해졌어요. 캐릭터와 세계관 설정을 네트워크로 연결하니 일관성 유지가 쉬워요.' },
-  { id: 2, name: 'Park J.', role: '시나리오 작가', rating: 5, review: '드라마 시나리오 작업에 최고예요. 복선과 에피소드 연결을 한눈에 파악할 수 있습니다.' },
-  { id: 3, name: 'Lee M.', role: '시인', rating: 5, review: '시적 영감과 이미지들을 연결해서 관리하니 창작의 흐름이 끊기지 않아요.' },
-  { id: 4, name: 'Choi Y.', role: '에세이 작가', rating: 5, review: '일상의 기록들이 어떻게 연결되는지 보면서 새로운 글감을 발견하게 됩니다.' },
-  { id: 5, name: 'Jung H.', role: '논픽션 작가', rating: 5, review: '취재 자료와 인터뷰 내용을 체계적으로 정리할 수 있어서 업무 효율이 크게 올랐습니다.' },
-  { id: 6, name: 'Kang D.', role: '웹소설 작가', rating: 5, review: '연재 중인 작품의 복잡한 설정을 관리하기 좋아요. AI 검색으로 설정 오류도 바로 찾아냅니다!' },
+  {
+    id: 1,
+    name: "Kim S.",
+    role: "소설가",
+    rating: 5,
+    review:
+      "장편 소설 집필 시 참고자료 관리가 정말 편해졌어요. 캐릭터와 세계관 설정을 네트워크로 연결하니 일관성 유지가 쉬워요.",
+  },
+  {
+    id: 2,
+    name: "Park J.",
+    role: "시나리오 작가",
+    rating: 5,
+    review:
+      "드라마 시나리오 작업에 최고예요. 복선과 에피소드 연결을 한눈에 파악할 수 있습니다.",
+  },
+  {
+    id: 3,
+    name: "Lee M.",
+    role: "시인",
+    rating: 5,
+    review:
+      "시적 영감과 이미지들을 연결해서 관리하니 창작의 흐름이 끊기지 않아요.",
+  },
+  {
+    id: 4,
+    name: "Choi Y.",
+    role: "에세이 작가",
+    rating: 5,
+    review:
+      "일상의 기록들이 어떻게 연결되는지 보면서 새로운 글감을 발견하게 됩니다.",
+  },
+  {
+    id: 5,
+    name: "Jung H.",
+    role: "논픽션 작가",
+    rating: 5,
+    review:
+      "취재 자료와 인터뷰 내용을 체계적으로 정리할 수 있어서 업무 효율이 크게 올랐습니다.",
+  },
+  {
+    id: 6,
+    name: "Kang D.",
+    role: "웹소설 작가",
+    rating: 5,
+    review:
+      "연재 중인 작품의 복잡한 설정을 관리하기 좋아요. AI 검색으로 설정 오류도 바로 찾아냅니다!",
+  },
 ];
 
 // 기능 데이터
 const features = [
   {
     icon: Network,
-    title: '노드 기반 시각화',
-    description: '아이디어와 자료를 네트워크로 연결하여 관계를 한눈에 파악하세요.'
+    title: "노드 기반 시각화",
+    description:
+      "아이디어와 자료를 네트워크로 연결하여 관계를 한눈에 파악하세요.",
   },
   {
     icon: Search,
-    title: 'AI 맞춤 검색',
-    description: 'AI가 맥락을 이해하여 관련 자료를 정확하게 찾아드립니다.'
+    title: "AI 맞춤 검색",
+    description: "AI가 맥락을 이해하여 관련 자료를 정확하게 찾아드립니다.",
   },
   {
     icon: History,
-    title: '히스토리 기반 요약',
-    description: '참고한 자료의 흐름을 추적하고 자동으로 요약해드립니다.'
+    title: "히스토리 기반 요약",
+    description: "참고한 자료의 흐름을 추적하고 자동으로 요약해드립니다.",
   },
   {
     icon: Zap,
-    title: '빠른 자료 추가',
-    description: '기사, 논문, 메모, 아이디어를 손쉽게 아카이브하세요.'
+    title: "빠른 자료 추가",
+    description: "기사, 논문, 메모, 아이디어를 손쉽게 아카이브하세요.",
   },
   {
     icon: Shield,
-    title: '안전한 데이터 보관',
-    description: '소중한 자료를 안전하게 보관하고 언제든 접근하세요.'
+    title: "안전한 데이터 보관",
+    description: "소중한 자료를 안전하게 보관하고 언제든 접근하세요.",
   },
   {
     icon: Globe,
-    title: '어디서나 접근',
-    description: '웹 기반으로 어디서든 자료에 접근할 수 있습니다.'
-  }
+    title: "어디서나 접근",
+    description: "웹 기반으로 어디서든 자료에 접근할 수 있습니다.",
+  },
 ];
 
 // 별점 컴포넌트
@@ -57,8 +114,8 @@ function StarRating({ rating }: { rating: number }) {
         <Star
           key={i}
           size={14}
-          fill={i < rating ? '#FBBF24' : 'transparent'}
-          stroke={i < rating ? '#FBBF24' : '#6B7280'}
+          fill={i < rating ? "#FBBF24" : "transparent"}
+          stroke={i < rating ? "#FBBF24" : "#6B7280"}
         />
       ))}
     </div>
@@ -109,7 +166,10 @@ function CelestialSphereCanvas() {
       transparent: true,
       opacity: 0.2,
     });
-    const innerSphere = new THREE.Mesh(innerSphereGeometry, innerWireframeMaterial);
+    const innerSphere = new THREE.Mesh(
+      innerSphereGeometry,
+      innerWireframeMaterial
+    );
     scene.add(innerSphere);
 
     // 별 색상 팔레트
@@ -143,18 +203,21 @@ function CelestialSphereCanvas() {
       colors[i3 + 2] = color.b;
     }
 
-    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    starsGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+    starsGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
     // 원형 별을 위한 텍스처 생성
-    const starCanvas = document.createElement('canvas');
+    const starCanvas = document.createElement("canvas");
     starCanvas.width = 32;
     starCanvas.height = 32;
-    const ctx = starCanvas.getContext('2d')!;
+    const ctx = starCanvas.getContext("2d")!;
     const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+    gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.5)");
+    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 32, 32);
     const starTexture = new THREE.CanvasTexture(starCanvas);
@@ -197,12 +260,12 @@ function CelestialSphereCanvas() {
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       container.removeChild(renderer.domElement);
       renderer.dispose();
     };
@@ -214,60 +277,64 @@ function CelestialSphereCanvas() {
 export default function Landing() {
   const navigate = useNavigate();
   const { setDemoMode, clearChatMessages } = useAppStore();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [agreeRequired, setAgreeRequired] = useState(false);
   const [agreeMarketing, setAgreeMarketing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "monthly"
+  );
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleEmailSubmit = async () => {
     if (!email.trim()) {
-      setErrorMessage('이메일을 입력해주세요.');
-      setSubmitStatus('error');
+      setErrorMessage("이메일을 입력해주세요.");
+      setSubmitStatus("error");
       return;
     }
     if (!agreeRequired) {
-      setErrorMessage('필수 약관에 동의해주세요.');
-      setSubmitStatus('error');
+      setErrorMessage("필수 약관에 동의해주세요.");
+      setSubmitStatus("error");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setErrorMessage('올바른 이메일 형식을 입력해주세요.');
-      setSubmitStatus('error');
+      setErrorMessage("올바른 이메일 형식을 입력해주세요.");
+      setSubmitStatus("error");
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitStatus('idle');
-    setErrorMessage('');
+    setSubmitStatus("idle");
+    setErrorMessage("");
 
     try {
       await saveNewsletterEmail(email, agreeRequired, agreeMarketing);
-      setSubmitStatus('success');
-      setEmail('');
+      setSubmitStatus("success");
+      setEmail("");
       setAgreeRequired(false);
       setAgreeMarketing(false);
     } catch (error: any) {
-      setSubmitStatus('error');
-      if (error?.code === '23505') {
-        setErrorMessage('이미 등록된 이메일입니다.');
+      setSubmitStatus("error");
+      if (error?.code === "23505") {
+        setErrorMessage("이미 등록된 이메일입니다.");
       } else {
-        setErrorMessage('오류가 발생했습니다. 다시 시도해주세요.');
+        setErrorMessage("오류가 발생했습니다. 다시 시도해주세요.");
       }
     } finally {
       setIsSubmitting(false);
@@ -277,13 +344,13 @@ export default function Landing() {
   const handleDemoLogin = () => {
     setDemoMode(true);
     clearChatMessages();
-    navigate('/app');
+    navigate("/app");
   };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
     setMobileMenuOpen(false);
   };
@@ -294,9 +361,13 @@ export default function Landing() {
       <CelestialSphereCanvas />
 
       {/* Header */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-slate-900/90 backdrop-blur-md shadow-lg shadow-black/10' : 'bg-transparent'
-      }`}>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-slate-900/90 backdrop-blur-md shadow-lg shadow-black/10"
+            : "bg-transparent"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -309,13 +380,22 @@ export default function Landing() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
-              <button onClick={() => scrollToSection('features')} className="text-white/70 hover:text-white transition-colors text-sm font-medium">
+              <button
+                onClick={() => scrollToSection("features")}
+                className="text-white/70 hover:text-white transition-colors text-sm font-medium"
+              >
                 기능 소개
               </button>
-              <button onClick={() => scrollToSection('pricing')} className="text-white/70 hover:text-white transition-colors text-sm font-medium">
+              <button
+                onClick={() => scrollToSection("pricing")}
+                className="text-white/70 hover:text-white transition-colors text-sm font-medium"
+              >
                 요금제
               </button>
-              <button onClick={() => scrollToSection('reviews')} className="text-white/70 hover:text-white transition-colors text-sm font-medium">
+              <button
+                onClick={() => scrollToSection("reviews")}
+                className="text-white/70 hover:text-white transition-colors text-sm font-medium"
+              >
                 고객 후기
               </button>
             </nav>
@@ -329,7 +409,7 @@ export default function Landing() {
                 데모 체험
               </button>
               <button
-                onClick={() => scrollToSection('cta')}
+                onClick={() => scrollToSection("cta")}
                 className="px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-500 transition-colors"
               >
                 시작하기
@@ -350,13 +430,22 @@ export default function Landing() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-slate-900/95 backdrop-blur-md border-t border-white/10">
             <div className="px-4 py-4 space-y-3">
-              <button onClick={() => scrollToSection('features')} className="block w-full text-left py-2 text-white/70 hover:text-white">
+              <button
+                onClick={() => scrollToSection("features")}
+                className="block w-full text-left py-2 text-white/70 hover:text-white"
+              >
                 기능 소개
               </button>
-              <button onClick={() => scrollToSection('pricing')} className="block w-full text-left py-2 text-white/70 hover:text-white">
+              <button
+                onClick={() => scrollToSection("pricing")}
+                className="block w-full text-left py-2 text-white/70 hover:text-white"
+              >
                 요금제
               </button>
-              <button onClick={() => scrollToSection('reviews')} className="block w-full text-left py-2 text-white/70 hover:text-white">
+              <button
+                onClick={() => scrollToSection("reviews")}
+                className="block w-full text-left py-2 text-white/70 hover:text-white"
+              >
                 고객 후기
               </button>
               <hr className="border-white/10 my-3" />
@@ -367,7 +456,7 @@ export default function Landing() {
                 데모 체험
               </button>
               <button
-                onClick={() => scrollToSection('cta')}
+                onClick={() => scrollToSection("cta")}
                 className="block w-full py-2.5 bg-violet-600 text-white text-center rounded-lg font-medium"
               >
                 시작하기
@@ -393,12 +482,16 @@ export default function Landing() {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-3">
                 아이디어를 연결하고,
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">맥락을 기억하는</span> AI
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">
+                  맥락을 기억하는
+                </span>{" "}
+                AI
               </h1>
 
               {/* Subheadline */}
               <p className="text-base sm:text-lg text-white/70 mb-6 max-w-2xl mx-auto">
-                흩어진 자료와 아이디어를 네트워크로 연결하고, AI가 맥락을 이해하여 필요한 정보를 정확하게 찾아드립니다.
+                흩어진 자료와 아이디어를 네트워크로 연결하고, AI가 맥락을
+                이해하여 필요한 정보를 정확하게 찾아드립니다.
               </p>
 
               {/* CTA Button */}
@@ -415,7 +508,7 @@ export default function Landing() {
               {/* Social Proof */}
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center -space-x-2">
-                  {['김', '이', '박', '최', '정'].map((name, i) => (
+                  {["김", "이", "박", "최", "정"].map((name, i) => (
                     <div
                       key={i}
                       className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 border-2 border-slate-900 flex items-center justify-center text-white text-xs font-medium"
@@ -425,7 +518,8 @@ export default function Landing() {
                   ))}
                 </div>
                 <p className="text-xs text-white/50">
-                  <span className="font-semibold text-white/80">10+</span> 명의 사용자가 NOVA와 함께합니다
+                  <span className="font-semibold text-white/80">10+</span> 명의
+                  사용자가 NOVA와 함께합니다
                 </p>
               </div>
             </div>
@@ -453,7 +547,8 @@ export default function Landing() {
                 더 스마트한 지식 관리
               </h2>
               <p className="text-lg text-white/60">
-                NOVA는 단순한 메모 앱이 아닙니다. AI가 여러분의 지식을 연결하고 맥락을 이해합니다.
+                NOVA는 단순한 메모 앱이 아닙니다. AI가 여러분의 지식을 연결하고
+                맥락을 이해합니다.
               </p>
             </div>
 
@@ -467,7 +562,9 @@ export default function Landing() {
                   <div className="w-12 h-12 rounded-xl bg-violet-500/20 group-hover:bg-violet-500 flex items-center justify-center mb-4 transition-colors">
                     <feature.icon className="w-6 h-6 text-violet-400 group-hover:text-white transition-colors" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    {feature.title}
+                  </h3>
                   <p className="text-white/60">{feature.description}</p>
                 </div>
               ))}
@@ -496,8 +593,13 @@ export default function Landing() {
                       1
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white mb-2">자료 추가</h3>
-                      <p className="text-white/60">기사, 논문, 메모, 아이디어 등 다양한 형식의 자료를 간편하게 추가하세요.</p>
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        자료 추가
+                      </h3>
+                      <p className="text-white/60">
+                        기사, 논문, 메모, 아이디어 등 다양한 형식의 자료를
+                        간편하게 추가하세요.
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -505,8 +607,13 @@ export default function Landing() {
                       2
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white mb-2">AI와 대화</h3>
-                      <p className="text-white/60">필요한 정보를 AI에게 물어보세요. 맥락을 이해하여 관련 자료를 찾아 정확하게 답변합니다.</p>
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        AI와 대화
+                      </h3>
+                      <p className="text-white/60">
+                        필요한 정보를 AI에게 물어보세요. 맥락을 이해하여 관련
+                        자료를 찾아 정확하게 답변합니다.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -545,22 +652,26 @@ export default function Landing() {
                     3
                   </div>
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-sm font-medium mb-2">
-                      <History className="w-4 h-4" />
-                      <span>히스토리 추적</span>
-                    </div>
                     <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                       작업 흐름을 기억합니다
                     </h3>
                   </div>
                 </div>
                 <p className="text-lg text-white/60 mb-6">
-                  클릭한 노드의 히스토리를 기반으로 지금까지 참고했던 자료를 추출하여 요약합니다.
-                  결과물에 신뢰를 더하고, 작업의 흐름을 이해할 수 있습니다.
+                  클릭한 노드의 히스토리를 기반으로 지금까지 참고했던 자료를
+                  추출하여 요약합니다. 결과물에 신뢰를 더하고, 작업의 흐름을
+                  이해할 수 있습니다.
                 </p>
                 <ul className="space-y-3">
-                  {['참고 자료 자동 추적', '맥락 기반 요약 생성', '작업 흐름 시각화'].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-white/80">
+                  {[
+                    "참고 자료 자동 추적",
+                    "맥락 기반 요약 생성",
+                    "작업 흐름 시각화",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-3 text-white/80"
+                    >
                       <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
                         <CheckCircle className="w-3.5 h-3.5 text-green-400" />
                       </div>
@@ -620,24 +731,33 @@ export default function Landing() {
               {/* Billing Toggle */}
               <div className="inline-flex items-center p-1 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
                 <button
-                  onClick={() => setBillingCycle('monthly')}
+                  onClick={() => setBillingCycle("monthly")}
                   className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                    billingCycle === 'monthly'
-                      ? 'bg-violet-600 text-white'
-                      : 'text-white/60 hover:text-white'
+                    billingCycle === "monthly"
+                      ? "bg-violet-600 text-white"
+                      : "text-white/60 hover:text-white"
                   }`}
                 >
                   월간
                 </button>
                 <button
-                  onClick={() => setBillingCycle('yearly')}
+                  onClick={() => setBillingCycle("yearly")}
                   className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                    billingCycle === 'yearly'
-                      ? 'bg-violet-600 text-white'
-                      : 'text-white/60 hover:text-white'
+                    billingCycle === "yearly"
+                      ? "bg-violet-600 text-white"
+                      : "text-white/60 hover:text-white"
                   }`}
                 >
-                  연간 <span className={billingCycle === 'yearly' ? 'text-violet-200' : 'text-violet-400'}>-20%</span>
+                  연간{" "}
+                  <span
+                    className={
+                      billingCycle === "yearly"
+                        ? "text-violet-200"
+                        : "text-violet-400"
+                    }
+                  >
+                    -20%
+                  </span>
                 </button>
               </div>
             </div>
@@ -653,15 +773,23 @@ export default function Landing() {
                   <span className="text-white/50">/월</span>
                 </div>
                 <ul className="space-y-3 mb-8">
-                  {['최대 100개 노드', '100GB 저장공간', '기본 AI 검색', '이메일 지원'].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-white/70 text-sm">
+                  {[
+                    "최대 100개 노드",
+                    "100GB 저장공간",
+                    "기본 AI 검색",
+                    "이메일 지원",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-3 text-white/70 text-sm"
+                    >
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <button
-                  onClick={() => scrollToSection('cta')}
+                  onClick={() => scrollToSection("cta")}
                   className="w-full py-3 border border-white/20 text-white rounded-xl font-medium hover:bg-white/10 transition-colors"
                 >
                   출시 알림 받기
@@ -677,20 +805,29 @@ export default function Landing() {
                 <p className="text-white/50 text-sm mb-6">전문가를 위한</p>
                 <div className="mb-6">
                   <span className="text-4xl font-bold text-white">
-                    ₩{billingCycle === 'monthly' ? '15,000' : '12,000'}
+                    ₩{billingCycle === "monthly" ? "15,000" : "12,000"}
                   </span>
                   <span className="text-white/50">/월</span>
                 </div>
                 <ul className="space-y-3 mb-8">
-                  {['무제한 노드', '500GB 저장공간', '고급 AI 분석', '우선 지원', '히스토리 추적'].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-white/70 text-sm">
+                  {[
+                    "무제한 노드",
+                    "500GB 저장공간",
+                    "고급 AI 분석",
+                    "우선 지원",
+                    "히스토리 추적",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-3 text-white/70 text-sm"
+                    >
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <button
-                  onClick={() => scrollToSection('cta')}
+                  onClick={() => scrollToSection("cta")}
                   className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium hover:from-violet-500 hover:to-indigo-500 transition-all"
                 >
                   출시 알림 받기
@@ -705,8 +842,17 @@ export default function Landing() {
                   <span className="text-4xl font-bold text-white">맞춤형</span>
                 </div>
                 <ul className="space-y-3 mb-8">
-                  {['Pro의 모든 기능', '무제한 저장공간', '팀 협업 기능', '전담 지원', 'SSO 지원'].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-white/70 text-sm">
+                  {[
+                    "Pro의 모든 기능",
+                    "무제한 저장공간",
+                    "팀 협업 기능",
+                    "전담 지원",
+                    "SSO 지원",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-3 text-white/70 text-sm"
+                    >
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
                       {item}
                     </li>
@@ -745,12 +891,12 @@ export default function Landing() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="이메일을 입력하세요"
-                    disabled={isSubmitting || submitStatus === 'success'}
+                    disabled={isSubmitting || submitStatus === "success"}
                     className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <button
                     onClick={handleEmailSubmit}
-                    disabled={isSubmitting || submitStatus === 'success'}
+                    disabled={isSubmitting || submitStatus === "success"}
                     className="px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium hover:from-violet-500 hover:to-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
@@ -758,22 +904,26 @@ export default function Landing() {
                         <Loader2 className="w-5 h-5 animate-spin" />
                         전송 중...
                       </>
-                    ) : submitStatus === 'success' ? (
+                    ) : submitStatus === "success" ? (
                       <>
                         <CheckCircle className="w-5 h-5" />
                         완료
                       </>
                     ) : (
-                      '알림 신청'
+                      "알림 신청"
                     )}
                   </button>
                 </div>
 
-                {submitStatus === 'success' && (
-                  <p className="text-green-400 text-sm mb-4 text-center">등록이 완료되었습니다! 런칭 소식을 가장 먼저 알려드릴게요.</p>
+                {submitStatus === "success" && (
+                  <p className="text-green-400 text-sm mb-4 text-center">
+                    등록이 완료되었습니다! 런칭 소식을 가장 먼저 알려드릴게요.
+                  </p>
                 )}
-                {submitStatus === 'error' && errorMessage && (
-                  <p className="text-red-400 text-sm mb-4 text-center">{errorMessage}</p>
+                {submitStatus === "error" && errorMessage && (
+                  <p className="text-red-400 text-sm mb-4 text-center">
+                    {errorMessage}
+                  </p>
                 )}
 
                 {/* Checkboxes */}
@@ -803,7 +953,8 @@ export default function Landing() {
                 </div>
 
                 <p className="mt-4 text-xs text-white/40 text-center">
-                  수집 항목: 이메일 주소 | 수집 목적: 런칭 알림 및 서비스 정보 제공 | 보유 기간: 수신 거부 시까지
+                  수집 항목: 이메일 주소 | 수집 목적: 런칭 알림 및 서비스 정보
+                  제공 | 보유 기간: 수신 거부 시까지
                 </p>
               </div>
             </div>
@@ -821,10 +972,14 @@ export default function Landing() {
                 <span className="text-xl font-bold text-white">NOVA</span>
               </div>
               <p className="text-white/40 text-sm">
-                &copy; 2024 NOVA - Nodes Of Valuable Archives. All rights reserved.
+                &copy; 2024 NOVA - Nodes Of Valuable Archives. All rights
+                reserved.
               </p>
               <div className="flex items-center gap-6">
-                <a href="mailto:limdongxian1207@gmail.com" className="text-white/40 hover:text-white transition-colors text-sm">
+                <a
+                  href="mailto:limdongxian1207@gmail.com"
+                  className="text-white/40 hover:text-white transition-colors text-sm"
+                >
                   문의하기
                 </a>
               </div>
@@ -845,8 +1000,8 @@ export default function Landing() {
           >
             <h3 className="text-2xl font-bold text-white mb-4">팀 협업 문의</h3>
             <p className="text-white/70 mb-6 leading-relaxed">
-              팀 협업은 현재 맞춤형 제작을 도와드리고 있습니다.
-              아래 이메일로 문의 부탁드립니다.
+              팀 협업은 현재 맞춤형 제작을 도와드리고 있습니다. 아래 이메일로
+              문의 부탁드립니다.
             </p>
             <div className="bg-white/10 rounded-xl p-4 mb-6">
               <p className="text-white font-mono text-center select-all">
